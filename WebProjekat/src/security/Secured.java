@@ -13,5 +13,5 @@ import javax.ws.rs.NameBinding;
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})
 public @interface Secured {
-	AuthRole role() default AuthRole.BASIC;
+	AuthRole role() default AuthRole.USER;
 }

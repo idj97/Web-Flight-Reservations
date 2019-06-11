@@ -14,16 +14,17 @@ import javax.ws.rs.core.SecurityContext;
 import model.DataContext;
 import model.Person;
 import model.User;
+import security.AuthRole;
 import security.Secured;
 
 @Path("/products")
 public class PersonController {
 	
 	@Context
-	ServletContext ctx;
+	private ServletContext ctx;
 	
 	@Context
-	SecurityContext sctx;
+	private SecurityContext sctx;
 	 
 	
 	@GET
@@ -36,7 +37,7 @@ public class PersonController {
 	
 	
 	@POST
-	@Secured
+	@Secured(role=AuthRole.ADMIN)
 	@Path("/add")
 	public void add() {
 		DataContext dctx = (DataContext) ctx.getAttribute("data");
@@ -57,11 +58,7 @@ public class PersonController {
 	
 	private User getLoggedUser() {
 		String username = sctx.getUserPrincipal().getName();
-		for (User u : getDataContext().getUsers()) {
-			if (u.getUsername().equals(username))
-				return u;
-		}
-		return null;
+		return getDataContext().getUsers().get(username);
 	}
 	
 	

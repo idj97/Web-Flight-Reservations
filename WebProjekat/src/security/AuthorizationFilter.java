@@ -1,14 +1,22 @@
 package security;
 
 import java.io.IOException;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 
 import javax.annotation.Priority;
 import javax.servlet.ServletContext;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
+
+import model.DataContext;
+import model.User;
 
 /*
  * Web resources:
@@ -24,11 +32,40 @@ import javax.ws.rs.ext.Provider;
 public class AuthorizationFilter implements ContainerRequestFilter {
 	
 	@Context
-	ServletContext ctx;
+	private ServletContext ctx;
+	
+	@Context
+	private ResourceInfo resourceInfo;
 	
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
+		Method resourceMethod = resourceInfo.getResourceMethod();
+		AuthRole methodRole = extractRoles(resourceMethod);
+		User user = getLoggedUser(requestContext.getSecurityContext());
 		
+		if (methodRole == AuthRole.ADMIN && user.getRole() != AuthRole.ADMIN)
+			requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
 	}
 	
+	
+	private AuthRole extractRoles(AnnotatedElement method) {
+		// resource method can return null so additional checks are required
+		if (method == null)
+			return AuthRole.USER;
+		else {
+			Secured secured = method.getAnnotation(Secured.class);
+			if (secured == null) 
+				return AuthRole.USER;
+			else
+				return secured.role();
+		}
+	}
+	
+	
+	private User getLoggedUser(SecurityContext sctx) {
+		String username = sctx.getUserPrincipal().getName();
+		DataContext dctx = (DataContext) ctx.getAttribute("data");
+		return dctx.getUsers().get(username);
+	}
+
 }	

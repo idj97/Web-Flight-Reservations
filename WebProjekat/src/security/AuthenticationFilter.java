@@ -33,7 +33,7 @@ public class AuthenticationFilter implements ContainerRequestFilter	{
 		if (checkAuthHeader(authHeader)) {
 			DataContext dctx = (DataContext)ctx.getAttribute("data");
 			String token = authHeader.substring(7);
-			for (User u : dctx.getUsers()) {
+			for (User u : dctx.getUsers().values()) {
 				if (u.getToken() != null && u.getToken().equals(token)) {
 					SecurityContext sctx = requestContext.getSecurityContext();
 					RequestSecurityContext rsctx = new RequestSecurityContext(u, sctx.isSecure());

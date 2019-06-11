@@ -28,12 +28,11 @@ public class AuthenticationController {
 	@Path("/{username}/{password}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String authenticate(@PathParam("username") String username, @PathParam("password") String password) {
-		for (User u : getDataContext().getUsers()) {
-			if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
-				String token = RandomStringGenerator.get();
-				u.setToken(token);
-				return token;
-			}
+		User u = getDataContext().getUsers().get(username);
+		if (u != null && u.getPassword().equals(password)) {
+			String token = RandomStringGenerator.get();
+			u.setToken(token);
+			return token;
 		}
 		return "USER NOT FOUND.";
 	}
@@ -47,7 +46,7 @@ public class AuthenticationController {
 			@PathParam("role") AuthRole role) {
 		
 		User u = new User(username, password, role);
-		getDataContext().getUsers().add(u);
+		getDataContext().getUsers().put(u.getUsername(), u);
 		return u;
 	}
 	
@@ -67,10 +66,6 @@ public class AuthenticationController {
 	
 	private User getLoggedUser() {
 		String username = sctx.getUserPrincipal().getName();
-		for (User u : getDataContext().getUsers()) {
-			if (u.getUsername().equals(username))
-				return u;
-		}
-		return null;
+		return getDataContext().getUsers().get(username);
 	}
 }
