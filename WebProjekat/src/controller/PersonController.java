@@ -1,8 +1,10 @@
 package controller;
 
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -11,13 +13,17 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import common.ImageHandler;
 import model.DataContext;
 import model.Person;
 import model.User;
 import security.AuthRole;
 import security.Secured;
 
-@Path("/products")
+@Path("/persons")
 public class PersonController {
 	
 	@Context
@@ -30,7 +36,7 @@ public class PersonController {
 	@GET
 	@Path("/getOne")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Person getProduct() {
+	public Person getPerson() {
 		System.out.println("GET ONE METHOD CALLED");
 		return new Person("marko", "markovic", 35);
 	}
@@ -50,9 +56,22 @@ public class PersonController {
 	@GET
 	@Path("/getAll")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Person> getAllProducts() {
+	public List<Person> getAllPersons() {
 		System.out.println("GET ALL METHOD CALLED");
 		return ((DataContext)ctx.getAttribute("data")).getPersons();
+	}
+	
+	
+	@POST
+	@Path("/upload")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String uploadImage(
+			@FormDataParam("image") InputStream image,
+			@FormDataParam("image") FormDataContentDisposition imageDetails) {
+		ImageHandler.saveImage(image, imageDetails, ctx.getRealPath(""));
+		
+		return "success";
 	}
 	
 	
