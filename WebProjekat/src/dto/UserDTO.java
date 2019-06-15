@@ -1,9 +1,12 @@
 package dto;
 
+import java.io.Serializable;
+
 import model.User;
 import security.AuthRole;
 
-public class UserDTO {
+public class UserDTO implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String surname;
 	private String phone;

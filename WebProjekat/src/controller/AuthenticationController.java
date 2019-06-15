@@ -5,6 +5,7 @@ import java.io.InputStream;
 import javax.servlet.ServletContext;
 import javax.validation.constraints.NotBlank;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -50,16 +51,20 @@ public class AuthenticationController {
 			@FormDataParam("image") InputStream image,
 			@FormDataParam("image") FormDataContentDisposition imageDesc) {
 		
-		if (getDataContext().getUsers().get(username)==null) {
+		if (getDataContext().getUsers().get(username) == null) {
 			String path = ctx.getRealPath("") + "/img/" + imageDesc.getFileName();
 			ImageHandler.saveImage(image, imageDesc, path);
 			User u = new User(name, surname, phone, email, path, username, password);
-			getDataContext().getUsers().put(username, u);
-			return Response.ok(new ResponseDTO<String>(null, "Registration successfull.")).build();
+			getDataContext().getUsers().put(username, u);	
+			return Response
+					.ok(new ResponseDTO<String>(null, "Registration successfull."))
+					.build();
 		}
+		
 		return Response
 				.status(Response.Status.BAD_REQUEST)
-				.entity(new ResponseDTO<Object>(null, "Username is already taken.")).build();
+				.entity(new ResponseDTO<Object>(null, "Username is already taken."))
+				.build();
 	}
 		
 	
@@ -85,6 +90,16 @@ public class AuthenticationController {
 		User u = getLoggedUser();
 		u.setToken(null);
 		return Response.noContent().build();
+	}
+	
+	
+	@GET
+	@Secured
+	@Path("/details")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDetails() {
+		User u = getLoggedUser();
+		return Response.ok(new ResponseDTO<UserDTO>(new UserDTO(u), "no-message")).build();
 	}
 	
 	

@@ -1,8 +1,10 @@
 package listener;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,6 +14,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import model.DataContext;
+import model.User;
+import security.AuthRole;
 
 // Web resource: http://www.java2s.com/Tutorial/Java/0400__Servlet/SetServletContextListenerinwebXML.htm
 
@@ -62,6 +66,20 @@ public class StartupListener implements ServletContextListener {
 		}
 
 		ctx.setAttribute("data", dctx);
+		
+		path = ctx.getRealPath("") + File.separator + "data" + File.separator + "admins.csv";
+		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] tokens = line.split(",");
+				User u = new User(tokens[0], tokens[1], tokens[2], tokens[3], ctx.getRealPath("") + tokens[4], tokens[5], tokens[6]);
+				u.setRole(AuthRole.ADMIN);
+				dctx.getUsers().put(u.getUsername(), u);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
 	}
 
 	private boolean fileExists(String path) {
@@ -70,5 +88,6 @@ public class StartupListener implements ServletContextListener {
 			return false;
 		return true;
 	}
-
+	
+	
 }

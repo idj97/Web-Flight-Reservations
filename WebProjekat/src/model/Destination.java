@@ -1,10 +1,12 @@
 package model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Destination implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 	private String name;
 	private String state;
 	private String airportName;
@@ -13,11 +15,26 @@ public class Destination implements Serializable {
 	private float log;
 	private String picturePath;
 	private boolean archived;
-	private List<Flight> startFlights;
-	private List<Flight> endFlights;
+	private Map<String, Flight> startFlights;
+	private Map<String, Flight> endFlights;
 
 	public Destination() {
 		super();
+	}
+
+	public Destination(String name, String state, String airportName, String airportCode, float lat, float log,
+			String picturePath) {
+		super();
+		this.name = name;
+		this.state = state;
+		this.airportName = airportName;
+		this.airportCode = airportCode;
+		this.lat = lat;
+		this.log = log;
+		this.picturePath = picturePath;
+		this.archived = false;
+		this.startFlights = new ConcurrentHashMap<>();
+		this.endFlights = new ConcurrentHashMap<>();
 	}
 
 	public String getName() {
@@ -84,19 +101,19 @@ public class Destination implements Serializable {
 		this.archived = archived;
 	}
 
-	public List<Flight> getStartFlights() {
+	public Map<String, Flight> getStartFlights() {
 		return startFlights;
 	}
 
-	public void setStartFlights(List<Flight> startFlights) {
+	public void setStartFlights(Map<String, Flight> startFlights) {
 		this.startFlights = startFlights;
 	}
 
-	public List<Flight> getEndFlights() {
+	public Map<String, Flight> getEndFlights() {
 		return endFlights;
 	}
 
-	public void setEndFlights(List<Flight> endFlights) {
+	public void setEndFlights(Map<String, Flight> endFlights) {
 		this.endFlights = endFlights;
 	}
 

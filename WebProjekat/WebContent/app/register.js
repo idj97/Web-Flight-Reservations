@@ -1,8 +1,8 @@
-Vue.component("register-component", {
+Vue.component("register", {
 	template: `
 		<div>
-			<h1> REGISTER COMPONENT </h1> 
-			<a href='#/'>LOGIN</a>
+			<h1> REGISTER COMPONENT </h1>
+			<a href='#/login'>LOGIN</a>
 
 			<form id="register-form">
 				<p>Username : <input type="text" name="username"/></p>
@@ -23,15 +23,25 @@ Vue.component("register-component", {
 
 			axios.post("/WebProjekat/api/auth/register", formData, {headers: {"Content-Type":"multipart/form-data"}})
 				 .then(
-				 	response => { 
+				 	response => {
 				 		alert(response.data.message);
-				 		app.$router.push("/");
+				 		app.$router.push("/login");
 				 	})
 			     .catch(
 				 	error => {
-				 		alert(error.response.data.message) 
+				 		alert(error.response.data.message)
 				 	}
 			);
+		}
+	},
+	mounted: function() {
+		var user = localStorage.getItem("user");
+		if (user != null) {
+			user = JSON.parse(user);
+			if (user.role == "USER")
+				app.$router.push("/user/home");
+			else
+				app.$router.push("/admin/home");
 		}
 	}
 });
