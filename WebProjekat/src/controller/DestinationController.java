@@ -37,7 +37,6 @@ public class DestinationController {
 	SecurityContext sctx;
 	
 	
-	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response get() {
@@ -58,7 +57,7 @@ public class DestinationController {
 			@NotNull @FormDataParam("lat") Float lat,
 			@NotNull @FormDataParam("log") Float log,
 			@NotNull @FormDataParam("image") InputStream image,
-			@NotNull @FormDataParam("imageDesc") FormDataContentDisposition imageDesc) {
+			@NotNull @FormDataParam("image") FormDataContentDisposition imageDesc) {
 		if (getDataContext().getDestinations().get(name) == null) {
 			String path = getPath() + imageDesc.getFileName();
 			ImageHandler.saveImage(image, imageDesc, path);
