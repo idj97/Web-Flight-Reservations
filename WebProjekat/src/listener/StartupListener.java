@@ -28,6 +28,7 @@ public class StartupListener implements ServletContextListener {
 		ServletContext ctx = arg0.getServletContext();
 		DataContext dctx = (DataContext) ctx.getAttribute("data");
 		String path = ctx.getRealPath("") + "/data/dataContext.ser";
+		System.out.println(path);
 		try {
 			FileOutputStream fileOut = new FileOutputStream(path);
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -48,6 +49,7 @@ public class StartupListener implements ServletContextListener {
 		ServletContext ctx = arg0.getServletContext();
 		DataContext dctx = new DataContext();
 		String path = ctx.getRealPath("") + "/data/dataContext.ser";
+		System.out.println("path" + path);
 		if (fileExists(path)) {
 			try {
 				FileInputStream fileIn = new FileInputStream(path);

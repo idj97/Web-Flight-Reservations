@@ -15,7 +15,7 @@ Vue.component("destinations", {
   },
   template:`
     <div>
-        <table border="1">
+        <table class="table table-cover">
             <tr>
                 <th> Name </th>
                 <th> State </th>
@@ -32,34 +32,45 @@ Vue.component("destinations", {
                 <td> {{ d.airportName }} </td>
                 <td> {{ d.airportCode }} </td>
                 <td> {{ d.archived }} </td>
-                <td> <a href="#" v-on:click="showMap(d.lat, d.log)"> Show </a> </td>
-                <td> <a href="#" v-on:click="showImg(d.picturePath)"> Show </a> </td>
-                <td> <a href="#" v-on:click="showEdit(d)"> Edit </a> </td>
+                <td> <a class="form-control" href="#" v-on:click="showMap(d.lat, d.log)"> Show </a> </td>
+                <td> <a class="form-control" href="#" v-on:click="showImg(d.picturePath)"> Show </a> </td>
+                <td> <a class="form-control" href="#" v-on:click="showEdit(d)"> Edit </a> </td>
             </tr>
         </table>
 
         <google-map ref="googleMap"></google-map>
         <image-view ref="imageView"></image-view>
 
-        <a href="#create-dest" data-toggle="modal" data-target="#create-dest">Create destination</a>
-
+        <button class="btn btn-primary" data-toggle="modal" data-target="#create-dest">Create destination</button>
+	  	<!--modal dodavanja-->
         <div class="modal fade" id="create-dest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
+          <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">Create destination</h5>
               </div>
               <div class="modal-body">
                 <form id="create-destination-form">
-                    <table>
-                        <tr> <td> Name: </td> <td> <input type="text" name="name"/> </td> </tr>
-                        <tr> <td> State: </td> <td> <input type="text" name="state"/> </td> </tr>
-                        <tr> <td> Airport name: </td> <td> <input type="text" name="airportName"/> </td> </tr>
-                        <tr> <td> Airport state: </td> <td> <input type="text" name="airportCode"/> </td> </tr>
-                        <tr> <td> Lat: </td> <td> <input type="text" name="lat"/> </td> </tr>
-                        <tr> <td> Log: </td> <td> <input type="text" name="log"/> </td> </tr>
-                        <tr> <td> Image: </td> <td> <input type="file" name="image"/> </td> </tr>
-                    </table>
+                    	  <label for="name"><b>Name :</b></label>
+						  <input type="text" class="form-control" name="name">
+						  
+						 <label for="state"><b>State :</b></label>
+						  <input type="text" class="form-control" name="state">
+						  
+						 <label for="airportName"><b>Airport name :</b></label>
+						  <input type="text" class="form-control" name="airportName">
+						  
+						 <label for="airportCode"><b>Airport state :</b></label>
+						  <input type="text" class="form-control" name="airportCode">
+						  
+						 <label for="lat"><b>Latitude :</b></label>
+						  <input type="text" class="form-control" name="lat">
+						  
+						 <label for="log"><b>Longitude :</b></label>
+						  <input type="text" class="form-control" name="log">
+						 
+						 <label for="image"><b>Image :</b></label>
+                          <input class="form-control" type="file" name="image"/>
                 </form>
               </div>
               <div class="modal-footer">
@@ -69,24 +80,38 @@ Vue.component("destinations", {
             </div>
           </div>
         </div>
-        
+        <!--modal editovanja-->
         <div class="modal fade" id="edit-dest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
+          <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">Edit destination</h5>
               </div>
               <div class="modal-body">
                 <form id="edit-destination-form">
-                    <table>
-                        <tr> <td> Name: </td> <td> <input v-model:value="currDest.name" type="text" name="name" readonly/> </td> </tr>
-                        <tr> <td> State: </td> <td> <input v-model:value="currDest.state" type="text" name="state"/> </td> </tr>
-                        <tr> <td> Airport name: </td> <td> <input v-model:value="currDest.airportName" type="text" name="airportName"/> </td> </tr>
-                        <tr> <td> Airport state: </td> <td> <input v-model:value="currDest.airportCode" type="text" name="airportCode"/> </td> </tr>
-                        <tr> <td> Lat: </td> <td> <input v-model:value="currDest.lat" type="text" name="lat"/> </td> </tr>
-                        <tr> <td> Log: </td> <td> <input v-model:value="currDest.log" type="text" name="log"/> </td> </tr>
-                        <tr> <td> Archived: </td> <td> <input v-model:value="currDest.archived" type="checkbox" name="archived"/> </td> </tr>
-                    </table>
+                	
+                		<label for="name"><b>Name :</b></label>
+						  <input v-model:value="currDest.name" type="text" class="form-control" name="name" readonly>
+						  
+						 <label for="state"><b>State :</b></label>
+						  <input v-model:value="currDest.state" type="text" class="form-control" name="state">
+						  
+						 <label for="airportName"><b>Airport name :</b></label>
+						  <input v-model:value="currDest.airportName" type="text" class="form-control" name="airportName">
+						  
+						 <label for="airportCode"><b>Airport state :</b></label>
+						  <input v-model:value="currDest.airportCode" type="text" class="form-control" name="airportCode">
+						  
+						 <label for="lat"><b>Latitude :</b></label>
+						  <input v-model:value="currDest.at" type="text" class="form-control" name="lat">
+						  
+						 <label for="log"><b>Longitude :</b></label>
+						  <input v-model:value="currDest.log" type="text" class="form-control" name="log">
+						 
+						 <label for="image"><b>Archived :</b></label>
+                          <input v-model:value="currDest.archived" class="form-control" type="checkbox" name="archived"/>
+                	
+                	
                 </form>
               </div>
               <div class="modal-footer">
