@@ -6,16 +6,17 @@ Vue.component("login", {
 		}
 	},
 	template: `
-	<div>
-		<h1> LOGIN COMPONENT </h1>
-		<label for="usernameInput">Username:</label>
-		<input v-model="username" type="text" name="username"></input><br>
+	<div id="loginDiv">
+		<h1> LOGIN </h1>
+		<label for="usernameInput"><b>Username:</b></label>
+		<input class="form-control" placeholder="Enter your username..." v-model="username" type="text" name="username"></input><br>
 
-		<label for="passwordInput">Password:</label>
-		<input v-model="password" type="password" name="password"></input> <br>
-		<button v-on:click="login">Login</button>
+		<label for="passwordInput"><b>Password:</b></label>
+		<input class="form-control" placeholder="Enter your password..." v-model="password" type="password" name="password"></input> <br>
+		<button type="button" id="loginButton" class="btn btn-primary" v-on:click="login">Login</button>
 		<br>
-		<a href='#/register'>register</a>
+		<label id="regLabel"for="register"></b>Dont have an account?</b></label>
+		<a href='#/register'>Register</a>
 	</div>`,
 
 	methods: {
