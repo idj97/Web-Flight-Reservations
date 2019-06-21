@@ -3,7 +3,7 @@ package dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public class EditDestinationDTO {
+public class DestinationDTO {
 	@NotBlank private String name;
 	@NotBlank private String state;
 	@NotBlank private String airportName;
@@ -11,8 +11,9 @@ public class EditDestinationDTO {
 	@NotNull private Float lat;
 	@NotNull private Float log;
 	@NotNull private Boolean archived;
+	private String path;
 	
-	public EditDestinationDTO() {
+	public DestinationDTO() {
 		super();
 	}
 

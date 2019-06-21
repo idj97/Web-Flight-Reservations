@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Destination implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	private String name;
 	private String state;
 	private String airportName;

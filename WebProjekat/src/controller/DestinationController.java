@@ -23,7 +23,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import common.ImageHandler;
-import dto.EditDestinationDTO;
+import dto.DestinationDTO;
 import model.DataContext;
 import model.Destination;
 
@@ -98,7 +98,7 @@ public class DestinationController {
 	//@Secured(role = AuthRole.ADMIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response editDestination(@Valid EditDestinationDTO dest) {
+	public Response editDestination(@Valid DestinationDTO dest) {
 		Destination d = getDataContext().getDestinations().get(dest.getName());
 		if (d != null) {
 			d.setState(dest.getState());

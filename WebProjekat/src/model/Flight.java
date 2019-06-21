@@ -2,7 +2,10 @@ package model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import dto.FlightDTO;
 
 public class Flight implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -16,11 +19,25 @@ public class Flight implements Serializable {
 	private FlightType type;
 	private Destination start;
 	private Destination end;
-	private List<Reservation> reservations;
+	private Map<String, Reservation> reservations = new ConcurrentHashMap<String, Reservation>();
 
 	public Flight() {
 		super();
 	}
+	
+	public Flight(FlightDTO dto, Destination start, Destination end, Date date) {
+		number = dto.getNumber();
+		price = dto.getPrice();
+		airplane = dto.getAirplane();
+		firstSize = dto.getFirstSize();
+		businessSize = dto.getBusinessSize();
+		economySize = dto.getEconomySize();
+		type = dto.getType();
+		this.start = start;
+		this.end = end;
+		this.date = date;
+	}
+	
 
 	public String getNumber() {
 		return number;
@@ -102,11 +119,11 @@ public class Flight implements Serializable {
 		this.end = end;
 	}
 
-	public List<Reservation> getReservations() {
+	public Map<String, Reservation> getReservations() {
 		return reservations;
 	}
 
-	public void setReservations(List<Reservation> reservations) {
+	public void setReservations(Map<String, Reservation> reservations) {
 		this.reservations = reservations;
 	}
 
