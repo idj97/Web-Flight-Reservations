@@ -73,4 +73,12 @@ public class DestinationDTO {
 		this.archived = archived;
 	}
 
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
 }

@@ -161,7 +161,7 @@ Vue.component("destinations", {
       
       
       editDestination: function() {
-    	  if (true) {
+    	  if (validateObject(this.currDest)) {
     		  axios.put("/WebProjekat/api/destinations", this.currDest)
     		       .then(response => {
     		    	   toastr.success("Edits saved.");
@@ -169,9 +169,11 @@ Vue.component("destinations", {
     		    	   $("#edit-dest").modal("toggle");
     		       })
     		       .catch(response => {
-    		    	   coastr.error("Something is wrong with your request.");
+    		    	   toastr.error("Something is wrong with your request.");
                        console.log(response);
     		       });
+    	  } else {
+    		  toastr.warning("Please enter all data.");
     	  }
       },
 
@@ -185,9 +187,20 @@ Vue.component("destinations", {
 
       validateForm: function(form) {
           for (var pair of form.entries())
-              if (!pair[1])
+              if (pair[0] === "image" && pair[1].name === "")
+            	  return false;
+        	  if (!pair[1])
                   return false;
           return true;
+      },
+      
+      
+      validateObject: function(object) {
+    	  for (var key of Object.keys(object)) {
+    		  if (!object[key])
+    			  return false;
+    	  }
+    	  return true;
       },
 
 

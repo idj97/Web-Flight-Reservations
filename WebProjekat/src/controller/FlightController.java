@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -59,7 +60,7 @@ public class FlightController {
 			Destination end = getDataContext().getDestinations().get(dto.getEnd());
 			
 			Date date = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			try { date = sdf.parse(dto.getDate()); } 
 			catch (ParseException e) { return Response.status(Status.BAD_REQUEST).build(); }
 			
@@ -84,7 +85,7 @@ public class FlightController {
 			Destination end = getDataContext().getDestinations().get(dto.getEnd());
 			
 			Date date = null;
-			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			try { date = sdf.parse(dto.getDate()); } 
 			catch (ParseException e) { return Response.status(Status.BAD_REQUEST).build(); }
 			
@@ -123,14 +124,14 @@ public class FlightController {
 	
 	
 	
-	
 	@GET
-	@Path("/search/{start}/{end}")
+	@Path("/search/{start}/{end}/{date}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response basicSearch(@NotBlank @PathParam("start") String start, @NotBlank @PathParam("end") String end) {
+	public Response basicSearch(@NotNull @PathParam("start") String start, @NotNull @PathParam("end") String end,
+			@PathParam("date") String date) {
 		List<FlightDTO> results = new ArrayList<>();
 		for (Flight f : getDataContext().getFlights().values()) {
-			if (searchHit(f, start, end)) 
+			if (searchHit(f, start, end, date)) 
 				results.add(new FlightDTO(f));
 		}
 		return Response.ok().build();
@@ -140,13 +141,22 @@ public class FlightController {
 	
 	
 	
-	private boolean searchHit(Flight f, String start, String end) {
+	private boolean searchHit(Flight f, String start, String end, String date) {
 		start = start.toLowerCase();
 		end = end.toLowerCase();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		if (!sdf.format(f.getDate()).equals(date))
+			return false;
+		
+		if (f.getStart().isArchived() || f.getEnd().isArchived())
+			return false;
+		
 		if (f.getStart().getName().toLowerCase().contains(start) || f.getStart().getState().toLowerCase().contains(start) ||
 				f.getEnd().getName().toLowerCase().contains(end) || f.getEnd().getState().toLowerCase().contains(end))
 			return true;
-		return true;
+		
+		return false;
 	}
 	
 	
@@ -161,7 +171,7 @@ public class FlightController {
 		if (getDataContext().getFlights().containsKey(dto.getNumber()))
 			return false;
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			sdf.parse(dto.getDate());
 		} catch (ParseException e) { 
@@ -185,7 +195,7 @@ public class FlightController {
 		if (!getDataContext().getFlights().containsKey(dto.getNumber()))
 			return false;
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/YYYY");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			sdf.parse(dto.getDate());
 		} catch (ParseException e) { 
@@ -218,8 +228,5 @@ public class FlightController {
 		
 		return true;
 	}
-	
-	
-	
 	
 }
