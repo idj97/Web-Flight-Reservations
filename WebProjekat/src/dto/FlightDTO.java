@@ -25,7 +25,6 @@ public class FlightDTO {
 		super();
 	}
 	
-	
 	public FlightDTO(Flight f) {
 		number = f.getNumber();
 		price = f.getPrice();
@@ -40,7 +39,6 @@ public class FlightDTO {
 		end = f.getEnd().getName();
 	}
 	
-
 	public String getNumber() {
 		return number;
 	}

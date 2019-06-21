@@ -88,21 +88,14 @@ public class FlightController {
 	public Response edit(@Valid FlightDTO dto) {
 		if (verifyEdit(dto)) {
 			Flight f = getDataContext().getFlights().get(dto.getNumber());
-			Destination start = getDataContext().getDestinations().get(dto.getStart());
-			Destination end = getDataContext().getDestinations().get(dto.getEnd());
 			
 			Date date = null;
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			try { date = sdf.parse(dto.getDate()); } 
 			catch (ParseException e) { return Response.status(Status.BAD_REQUEST).build(); }
 			
-			
-			
-			
 			f.setAirplane(dto.getAirplane());
 			f.setDate(date);
-			f.setStart(start);
-			f.setEnd(end);
 			f.setBusinessSize(dto.getBusinessSize());
 			f.setFirstSize(dto.getFirstSize());
 			f.setEconomySize(dto.getEconomySize());
@@ -212,15 +205,6 @@ public class FlightController {
 		} catch (ParseException e) { 
 			return false; 
 		}
-		
-		if (dto.getStart().equals(dto.getEnd()))
-			return false;
-		
-		if (!getDataContext().getDestinations().containsKey(dto.getStart()))
-			return false;
-		
-		if (!getDataContext().getDestinations().containsKey(dto.getStart()))
-			return false;
 		
 		return true;
 	}

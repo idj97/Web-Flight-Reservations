@@ -19,7 +19,7 @@ public class Flight implements Serializable {
 	private FlightType type;
 	private Destination start;
 	private Destination end;
-	private Map<String, Reservation> reservations = new ConcurrentHashMap<String, Reservation>();
+	private Map<Long, Reservation> reservations = new ConcurrentHashMap<>();
 
 	public Flight() {
 		super();
@@ -119,11 +119,11 @@ public class Flight implements Serializable {
 		this.end = end;
 	}
 
-	public Map<String, Reservation> getReservations() {
+	public Map<Long, Reservation> getReservations() {
 		return reservations;
 	}
 
-	public void setReservations(Map<String, Reservation> reservations) {
+	public void setReservations(Map<Long, Reservation> reservations) {
 		this.reservations = reservations;
 	}
 

@@ -1,8 +1,8 @@
 package model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import security.AuthRole;
 
@@ -14,7 +14,7 @@ public class User implements Serializable {
 	private String email;
 	private String picturePath;
 	private boolean blocked;
-	private List<Reservation> reservations;
+	private Map<Long, Reservation> reservations = new ConcurrentHashMap<>();
 
 	private String username;
 	private String password;
@@ -23,9 +23,9 @@ public class User implements Serializable {
 	public User() {
 		super();
 	}
-	
-	public User(String uname, String surname, String phone, String email, String picturePath,
-			String username, String password) {
+
+	public User(String uname, String surname, String phone, String email, String picturePath, String username,
+			String password) {
 		super();
 		this.uname = uname;
 		this.surname = surname;
@@ -36,7 +36,6 @@ public class User implements Serializable {
 		this.username = username;
 		this.password = password;
 		this.role = AuthRole.USER;
-		this.reservations = new ArrayList<Reservation>();
 	}
 
 	public String getSurname() {
@@ -107,20 +106,20 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
-	public List<Reservation> getReservations() {
-		return reservations;
-	}
-
-	public void setReservations(List<Reservation> reservations) {
-		this.reservations = reservations;
-	}
-
 	public String getUname() {
 		return uname;
 	}
 
 	public void setUname(String uname) {
 		this.uname = uname;
+	}
+
+	public Map<Long, Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(Map<Long, Reservation> reservations) {
+		this.reservations = reservations;
 	}
 
 }
