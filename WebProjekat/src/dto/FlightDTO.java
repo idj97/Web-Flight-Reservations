@@ -32,7 +32,7 @@ public class FlightDTO {
 		firstSize = f.getFirstSize();
 		businessSize = f.getBusinessSize();
 		economySize = f.getEconomySize();
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		date = sdf.format(f.getDate());
 		type = f.getType();
 		start = f.getStart().getName();
