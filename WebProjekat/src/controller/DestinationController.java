@@ -2,6 +2,8 @@ package controller;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
@@ -40,7 +42,11 @@ public class DestinationController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response get() {
-		return Response.ok(getDataContext().getDestinations().values()).build();
+		List<DestinationDTO> results = new ArrayList<>();
+		for (Destination d : getDataContext().getDestinations().values()) {
+			results.add(new DestinationDTO(d));
+		}
+		return Response.ok(results).build();
 	}
 	
 	
@@ -67,7 +73,7 @@ public class DestinationController {
 			System.out.println("Rel path:" + relPath);
 			Destination d = new Destination(name, state, airportName, airportCode, lat, log, relPath);
 			getDataContext().getDestinations().put(name, d);
-			return Response.ok(d).build();
+			return Response.ok(new DestinationDTO(d)).build();
 		}
 		return Response.status(Status.BAD_REQUEST).build();
 	}
@@ -88,7 +94,7 @@ public class DestinationController {
 			String relPath = getRelPath() + imageDesc.getFileName();
 			ImageHandler.saveImage(image, imageDesc, serverPath);
 			d.setPicturePath(relPath);
-			return Response.ok(d).build();
+			return Response.ok(new DestinationDTO(d)).build();
 		}
 		return Response.status(Status.BAD_REQUEST).build();
 	}
@@ -108,7 +114,7 @@ public class DestinationController {
 			d.setLat(dest.getLat());
 			d.setLog(dest.getLog());
 			d.setArchived(dest.getArchived());
-			return Response.ok(d).build();
+			return Response.ok().build();
 		}
 		return Response.status(Status.BAD_REQUEST).build();
 	}

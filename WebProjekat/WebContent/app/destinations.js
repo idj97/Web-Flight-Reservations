@@ -161,7 +161,7 @@ Vue.component("destinations", {
       
       
       editDestination: function() {
-    	  if (validateObject(this.currDest)) {
+    	  if (this.validateObject(this.currDest)) {
     		  axios.put("/WebProjekat/api/destinations", this.currDest)
     		       .then(response => {
     		    	   toastr.success("Edits saved.");

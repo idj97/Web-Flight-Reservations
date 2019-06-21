@@ -3,6 +3,8 @@ package dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import model.Destination;
+
 public class DestinationDTO {
 	@NotBlank private String name;
 	@NotBlank private String state;
@@ -11,11 +13,25 @@ public class DestinationDTO {
 	@NotNull private Float lat;
 	@NotNull private Float log;
 	@NotNull private Boolean archived;
-	private String path;
+	private String picturePath;
 	
 	public DestinationDTO() {
 		super();
 	}
+	
+	
+	
+	public DestinationDTO(Destination d) {
+		name = d.getName();
+		state = d.getState();
+		airportName = d.getAirportName();
+		airportCode = d.getAirportCode();
+		lat = d.getLat();
+		log = d.getLog();
+		archived = d.isArchived();
+		setPicturePath(d.getPicturePath());
+	}
+	
 
 	public String getName() {
 		return name;
@@ -73,12 +89,15 @@ public class DestinationDTO {
 		this.archived = archived;
 	}
 
-	public String getPath() {
-		return path;
+
+	public String getPicturePath() {
+		return picturePath;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+
+	public void setPicturePath(String picturePath) {
+		this.picturePath = picturePath;
 	}
+
 
 }

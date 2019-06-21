@@ -40,6 +40,11 @@ public class FlightController {
 	SecurityContext sctx;
 	
 	
+	private DataContext getDataContext() {
+		return (DataContext) ctx.getAttribute("data");
+	}
+	
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAll() {
@@ -88,6 +93,9 @@ public class FlightController {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			try { date = sdf.parse(dto.getDate()); } 
 			catch (ParseException e) { return Response.status(Status.BAD_REQUEST).build(); }
+			
+			
+			
 			
 			f.setAirplane(dto.getAirplane());
 			f.setDate(date);
@@ -159,12 +167,6 @@ public class FlightController {
 		return false;
 	}
 	
-	
-	
-	private DataContext getDataContext() {
-		return (DataContext) ctx.getAttribute("data");
-	}
-	
 
 	
 	private boolean verifyCreate(FlightDTO dto) {
@@ -172,11 +174,15 @@ public class FlightController {
 			return false;
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date d = null;
 		try {
-			sdf.parse(dto.getDate());
+			d = sdf.parse(dto.getDate());
 		} catch (ParseException e) { 
 			return false; 
 		}
+		
+		if (new Date().after(d)) 
+			return false;
 		
 		if (dto.getStart().equals(dto.getEnd()))
 			return false;
@@ -195,6 +201,9 @@ public class FlightController {
 		if (!getDataContext().getFlights().containsKey(dto.getNumber()))
 			return false;
 		
+		if (getDataContext().getFlights().get(dto.getNumber()).getReservations().size() > 0)
+			return false;
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			sdf.parse(dto.getDate());
@@ -209,9 +218,6 @@ public class FlightController {
 			return false;
 		
 		if (!getDataContext().getDestinations().containsKey(dto.getStart()))
-			return false;
-		
-		if (getDataContext().getFlights().get(dto.getNumber()).getReservations().size() > 0)
 			return false;
 		
 		return true;
