@@ -19,7 +19,7 @@ Vue.component("users", {
                 <td> {{ u.surname }} </td>
                 <td> {{ u.phone }} </td>
                 <td> {{ u.email }} </td>
-                <td> <input v-model:value="u.blocked" type="checkbox" name="blocked"/> </td>
+                <td> <input v-model:value="u.blocked" v-on:click="blockUser(u)" type="checkbox" name="blocked"/> </td>
             </tr>
         </table>
     </div>
@@ -27,13 +27,27 @@ Vue.component("users", {
   methods: {
 	  
 	  getUsers: function() {
-		  toastr.error("start");
 		  axios.get("/WebProjekat/api/users")
 		       .then(response => {
 		    	   this.users = response.data;
 		       })
 		       .catch(response => {
 		    	   toastr.error("Something is wrong with with your request. (get users)");
+		       });
+	  },
+	  
+	  
+	  blockUser: function(user) {
+		  axios.put(`/WebProjekat/api/users/block/${user.username}/${user.blocked}`)
+		       .then(response => {
+		    	   if (user.blocked)
+		    		   toastr.success("User is now blocked.");
+		    	   else 
+		    		   toastr.success("User is now unblocked.");
+		       })
+		       .catch(response => {
+		    	  user.blocked = !blocked;
+		    	  toastr.error("Blocking user failed."); 
 		       });
 	  }
 	  

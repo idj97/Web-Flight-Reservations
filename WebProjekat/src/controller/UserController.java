@@ -37,6 +37,7 @@ public class UserController {
 		List<UserDTO> users = new ArrayList<>();
 		for (User u : getDataContext().getUsers().values()) {
 			UserDTO dto = new UserDTO();
+			dto.setUsername(u.getUsername());
 			dto.setName(u.getUname());
 			dto.setEmail(u.getEmail());
 			dto.setPhone(u.getPhone());

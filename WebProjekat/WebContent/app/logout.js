@@ -8,14 +8,17 @@ Vue.component("logout", {
   `,
   methods: {
     logout: function() {
-      axios.post("/WebProjekat/api/auth/logout", {
-        headers: {
-          "Authorization" : "Bearer " + JSON.parse(localStorage.getItem("user")).token 
-        }
-      }).then(response => {
-        localStorage.clear();
-        app.$router.push("/login");
-      });
+    	axios.post("/WebProjekat/api/auth/logout")
+             .then(response => {
+     	         toastr.info("Logged out successfully.");
+     	         localStorage.clear();
+     			 app.$router.push("/login");
+             })
+             .catch(response => {
+            	 toastr.error("Something went wrong.");
+            	 localStorage.clear();
+         		 app.$router.push("/login");
+             });
+    	}
     }
-  }
 });

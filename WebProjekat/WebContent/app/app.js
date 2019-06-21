@@ -28,7 +28,7 @@ axios.interceptors.request.use(function (config) {
     var user = localStorage.getItem("user");
 	if (user != null) {
 		user = JSON.parse(user);
-		config.headers.Authorization = "Bearer " + user.token;
+		config.headers["Authorization"] = "Bearer " + user.token;
 	}
 	return config;
 });
