@@ -1,6 +1,20 @@
 Vue.component("flights", {
   data: function() {
     return {
+    	flightToEdit:{
+    		number: "",
+    		price: 0,
+    		airplane: "",
+    		firstSize: 0,
+    		businessSize: 0,
+    		economySize: 0,
+    		date: "",
+    		type: "",
+    		start: "",
+    		end: ""
+    		
+    		
+    	},
     	flights: [],
     	destinations:[],
     	flightToAdd:{
@@ -34,6 +48,8 @@ Vue.component("flights", {
                 <th> Business </th>
                 <th> First </th>
                 <th> Economy </th>
+                <th> Edit </th>
+                <th> Delete </th>
             </tr>
             <tr v-for="f in flights">
                 <td> {{ f.number }} </td>
@@ -46,8 +62,8 @@ Vue.component("flights", {
                 <td> {{ f.businessSize }} </td>
                 <td> {{ f.firstSize }} </td>
                 <td> {{ f.economySize }} </td>
-                <td> <a href="#" v-on:click="editFlight(f)"> Edit </a> </td>
-                <td> <a href="#" v-on:click="deleteFlight(f)"> Delete </a> </td>
+                <td> <a class="form-control" href="#" v-on:click="showEditModal(f)"> Edit </a> </td>
+                <td> <a class="form-control" href="#" v-on:click="deleteFlight(f)"> Delete </a> </td>
             </tr>
         </table>
         
@@ -113,37 +129,37 @@ Vue.component("flights", {
         			</div>
         			<div class="modal-body">
         				  <label for="number"><b>Flight number :</b></label>
-						  <input type="number" class="form-control" id="number">
+						  <input v-model:value="flightToEdit.number" type="number" class="form-control" id="number" readonly>
 						  
         				  <label for="startDestinationEdit"><b>Start destination :</b></label>
-        				  <select class="form-control" id="startDestinationEdit"></select>
+        				  <input type="text" v-model:value="flightToEdit.start" class="form-control" id="startDestinationEdit" readonly/>
         				  
         				  <label for="endDestinationEdit"><b>End destination :</b></label>
-        				  <select class="form-control" id="endDestinationEdit"></select>
+        				  <input type="text" v-model:value="flightToEdit.end" class="form-control" id="endDestinationEdit" readonly/>
         				  
           				  <label for="dateEdit"><b>Date :</b></label>
-						  <input type="date" class="form-control" id="dateEdit">
+						  <input type="string" v-model:value="flightToEdit.date" class="form-control" id="dateEdit">
 								
 						  <label for="priceEdit"><b>Price :</b></label>
-						  <input type="number" class="form-control" id="priceEdit">
+						  <input v-model:value="flightToEdit.price" type="number" class="form-control" id="priceEdit">
 						  
 						  <label for="typeEdit"><b>Flight type :</b></label>
-        				  <select class="form-control" id="typeEdit"></select>
+        				  <select v-model:value="flightToEdit.type" class="form-control" id="typeEdit"><option>CHARTER</option><option>REGIONAL</option><option>OVERSEA</option></select>
 								
 						  <label for="airplaneEdit"><b>Airplane :</b></label>
-						  <input type="text" class="form-control" id="airplaneEdit">
+						  <input v-model:value="flightToEdit.airplane" type="text" class="form-control" id="airplaneEdit">
 						  
 						  <label for="businessEdit"><b>Business class seats :</b></label>
-						  <input type="number" class="form-control" id="businessEdit">
+						  <input v-model:value="flightToEdit.businessSize" type="number" class="form-control" id="businessEdit">
 						  
 						  <label for="firstEdit"><b>First class seats :</b></label>
-						  <input type="number" class="form-control" id="firstEdit">
+						  <input v-model:value="flightToEdit.firstSize" type="number" class="form-control" id="firstEdit">
 						  
 						  <label for="economyEdit"><b>Economy class seats :</b></label>
-						  <input type="number" class="form-control" id="economyEdit">
+						  <input v-model:value="flightToEdit.economySize" type="number" class="form-control" id="economyEdit">
         			</div>
         			<div class="modal-footer">
-          				<button type="button" class="btn btn-success" >Edit</button>
+          				<button v-on:click="editFlight()"  class="btn btn-success" >Edit</button>
           				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         			</div>
       			</div>
@@ -154,7 +170,8 @@ Vue.component("flights", {
     </div>
    </div>
   `,
-  methods: {getFlights: function() {
+  methods: {
+  	  getFlights: function() {
 	  axios.get("/WebProjekat/api/flights", {headers: {"responseType":"json"}})
       .then(response => {
     	  this.flights = [];
@@ -174,6 +191,7 @@ Vue.component("flights", {
                        toastr.success("Flight added.")
                        this.destinations.push(response.data);
                        document.getElementById("closeAddFlightModal").click();
+                       this.getFlights();
                    })
                    .catch(response => {
                 	   
@@ -195,22 +213,41 @@ Vue.component("flights", {
           });
 	  },
 	  
-	  editFlight: function(flight) {
-		  // json copy
+	  editFlight: function() {
+		  console.log("ef");
+		  axios.put("/WebProjekat/api/flights", this.flightToEdit)
+          .then(response => {
+        	  toastr.success("Flight edited successfuly.");
+        	  this.getFlights();
+          })
+          .catch(response => {
+              toastr.error("Flight can't be edited.");
+          });
 	  },
 	  
 	  
 	  deleteFlight: function(flight) {
-		  // json copy
+	  console.log(flight);
+		  axios.delete(`/WebProjekat/api/flights/${flight.number}`)
+          .then(response => {
+        	  toastr.success("Flight deleted.")
+        	  this.getFlights();
+          })
+          .catch(response => {
+              toastr.error("Flight can't be deleted.");
+          });
 	  },
   
-  	  showEditModal: function() {
-  		$("#editFlightModal").modal();  
+  	  showEditModal: function(flight) {
+  		$("#editFlightModal").modal();
+  		this.flightToEdit = JSON.parse(JSON.stringify(flight));
+  		
   	  },
   	addM: function() {
   		$("#addFlightModal").modal();
   		this.getDestinations();
-  	  }},
+  	  }
+  	  },
   mounted: function() {
 	  this.getFlights();
 	  

@@ -8,7 +8,6 @@ const router = new VueRouter({
 	routes: [
 		{ path: "", component: LoginComponent },
 		{ path: "/login", component: LoginComponent },
-		{ path: "/register", component: RegisterComponent },
 		{ path: "/user", component: UserHomeComponent },
 		{ path: "/admin", component: AdminHomeComponent}
 	]
