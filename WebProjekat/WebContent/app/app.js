@@ -6,6 +6,7 @@ const AdminHomeComponent = { template: "<admin-home></admin-home>"}
 const router = new VueRouter({
 	mode: "hash",
 	routes: [
+		{ path: "", component: LoginComponent },
 		{ path: "/login", component: LoginComponent },
 		{ path: "/register", component: RegisterComponent },
 		{ path: "/user", component: UserHomeComponent },

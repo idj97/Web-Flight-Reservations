@@ -41,9 +41,9 @@ Vue.component("login", {
 		},
 	  loginSuccess: function(user) {
 			if (user.role == "USER")
-				app.$router.push("/user");
+				this.$router.push("/user");
 			else
-				app.$router.push("/admin");
+				this.$router.push("/admin");
 		}
 	},
 	mounted: function() {
