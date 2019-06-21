@@ -5,7 +5,6 @@ import java.io.Serializable;
 import model.User;
 import security.AuthRole;
 
-
 public class UserDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;

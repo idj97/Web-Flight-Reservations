@@ -103,7 +103,7 @@ Vue.component("destinations", {
 						  <input v-model:value="currDest.airportCode" type="text" class="form-control" name="airportCode">
 						  
 						 <label for="lat"><b>Latitude :</b></label>
-						  <input v-model:value="currDest.at" type="text" class="form-control" name="lat">
+						  <input v-model:value="currDest.lat" type="text" class="form-control" name="lat">
 						  
 						 <label for="log"><b>Longitude :</b></label>
 						  <input v-model:value="currDest.log" type="text" class="form-control" name="log">
