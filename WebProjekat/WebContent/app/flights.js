@@ -7,8 +7,8 @@ Vue.component("flights", {
     			start: "",
     			end: ""
     		},
-    		number: "",
-    		type: ""
+    		flightNumber: "",
+    		flightType: ""
     		
     		
     	},
@@ -64,7 +64,7 @@ Vue.component("flights", {
         	<input type="date" v-model:value="search.basicSearch.date" id="dateS"/>			  
         				  
         				  
-        	<button class="btn btn-dark" v-on:click="">Search</button>			  
+        	<button class="btn btn-dark" v-on:click="searchFlights()">Search</button>			  
         				  
         				  
         				  
@@ -286,12 +286,12 @@ Vue.component("flights", {
   		$("#addFlightModal").modal();
   		this.getDestinations();
   	  },
-  	search: function() {
+  	searchFlights: function() {
   		console.log(this.search);
-		  axios.get("/WebProjekat/api/combinedSearch", this.search, {headers: {"responseType":"json"}})
+		  axios.get("/WebProjekat/api/flights/combinedSearch", this.search, {headers: {"responseType":"json"}})
         .then(response => {
       	  this.destinations = [];
-            this.destinations = response.data;
+          this.destinations = response.data;
         })
         .catch(response => {
             toastr.error("Something went wrong.");
