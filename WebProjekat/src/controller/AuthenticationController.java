@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.File;
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
@@ -24,6 +25,7 @@ import dto.ResponseDTO;
 import dto.UserDTO;
 import model.DataContext;
 import model.User;
+import security.LoggedUser;
 import security.Secured;
 
 @Path("/auth")
@@ -32,10 +34,8 @@ public class AuthenticationController {
 	@Context
 	ServletContext ctx;
 	
-	
 	@Context
 	SecurityContext sctx;
-	
 	
 	@POST
 	@Path("/register")
@@ -52,9 +52,10 @@ public class AuthenticationController {
 			@FormDataParam("image") FormDataContentDisposition imageDesc) {
 		
 		if (getDataContext().getUsers().get(username) == null) {
-			String path = ctx.getRealPath("") + "/img/" + imageDesc.getFileName();
-			ImageHandler.saveImage(image, imageDesc, path);
-			User u = new User(name, surname, phone, email, path, username, password);
+			String serverPath = getPath() + imageDesc.getFileName();
+			String relPath = getRelPath() + imageDesc.getFileName();
+			ImageHandler.saveImage(image, imageDesc, serverPath);
+			User u = new User(name, surname, phone, email, relPath, username, password);
 			getDataContext().getUsers().put(username, u);	
 			return Response
 					.ok(new ResponseDTO<String>(null, "Registration successfull."))
@@ -73,10 +74,11 @@ public class AuthenticationController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response authenticate(@NotBlank @PathParam("username") String username, @NotBlank @PathParam("password") String password) {
 		User u = getDataContext().getUsers().get(username);
-		if (u != null && u.getPassword().equals(password) && !u.isBlocked() && u.getToken() == null) {
+		if (u != null && u.getPassword().equals(password) && !u.isBlocked() && !getDataContext().getActiveTokens().containsValue(u)) {
 			String token = RandomStringGenerator.get();
-			u.setToken(token);
-			return Response.ok(new ResponseDTO<UserDTO>(new UserDTO(u), "Login success.")).build();
+			getDataContext().getActiveTokens().put(token, u);
+			System.out.println("Logged user count:" + getDataContext().getActiveTokens().size());
+			return Response.ok(new ResponseDTO<UserDTO>(new UserDTO(u, token), "Login success.")).build();
 		}
 		return Response.status(Response.Status.BAD_REQUEST)
 				.entity(new ResponseDTO<Object>(null, "Bad credientals.")).build();
@@ -87,9 +89,10 @@ public class AuthenticationController {
 	@Secured
 	@Path("/logout")
 	public Response logout() {
-		User u = getLoggedUser();
-		u.setToken(null);
-		return Response.noContent().build();
+		String token = getToken();
+		getDataContext().getActiveTokens().remove(token);
+		System.out.println("Logged user count:" + getDataContext().getActiveTokens().size());
+		return Response.ok().build();
 	}
 	
 	
@@ -99,7 +102,8 @@ public class AuthenticationController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDetails() {
 		User u = getLoggedUser();
-		return Response.ok(new ResponseDTO<UserDTO>(new UserDTO(u), "no-message")).build();
+		String token = getToken();
+		return Response.ok(new ResponseDTO<UserDTO>(new UserDTO(u, token), "no-message")).build();
 	}
 	
 	
@@ -109,7 +113,25 @@ public class AuthenticationController {
 	
 	
 	private User getLoggedUser() {
-		String username = sctx.getUserPrincipal().getName();
-		return getDataContext().getUsers().get(username);
+		return ((LoggedUser) sctx.getUserPrincipal()).getUser();
 	}
+	
+	
+	private String getToken() {
+		return ((LoggedUser) sctx.getUserPrincipal()).getToken();
+	}
+	
+	
+	private String getPath() {
+		return ctx.getRealPath("") + "img" + File.separator + "users" + File.separator;
+	}
+	
+	
+	private String getRelPath() {
+		return File.separator + "WebProjekat" + 
+	           File.separator + "img" + 
+	           File.separator + "users" + 
+			   File.separator;
+	}
+ 	
 }

@@ -59,9 +59,12 @@ public class DestinationController {
 			@NotNull @FormDataParam("image") InputStream image,
 			@NotNull @FormDataParam("image") FormDataContentDisposition imageDesc) {
 		if (getDataContext().getDestinations().get(name) == null) {
-			String path = getPath() + imageDesc.getFileName();
-			ImageHandler.saveImage(image, imageDesc, path);
-			Destination d = new Destination(name, state, airportName, airportCode, lat, log, path);
+			String serverPath = getPath() + imageDesc.getFileName();
+			String relPath = getRelPath() + imageDesc.getFileName();
+			ImageHandler.saveImage(image, imageDesc, serverPath);
+			System.out.println("Server path:" + serverPath);
+			System.out.println("Rel path:" + relPath);
+			Destination d = new Destination(name, state, airportName, airportCode, lat, log, relPath);
 			getDataContext().getDestinations().put(name, d);
 			return Response.ok(d).build();
 		}
@@ -80,9 +83,10 @@ public class DestinationController {
 			@NotNull @FormDataParam("imageDesc") FormDataContentDisposition imageDesc) {
 		Destination d = getDataContext().getDestinations().get(name);
 		if (d != null) {
-			String path = getPath() + imageDesc.getFileName();
-			ImageHandler.saveImage(image, imageDesc, path);
-			d.setPicturePath(path);
+			String serverPath = getPath() + imageDesc.getFileName();
+			String relPath = getRelPath() + imageDesc.getFileName();
+			ImageHandler.saveImage(image, imageDesc, serverPath);
+			d.setPicturePath(relPath);
 			return Response.ok(d).build();
 		}
 		return Response.status(Status.BAD_REQUEST).build();
@@ -110,15 +114,21 @@ public class DestinationController {
 	}
 	
 	
-	
 	private DataContext getDataContext() {
 		return (DataContext) ctx.getAttribute("data");
 	}
 	
 	
-	
 	private String getPath() {
-		return ctx.getRealPath("") + File.pathSeparator + "img" + File.pathSeparator + "destinations" + File.pathSeparator;
+		return ctx.getRealPath("") + "img" + File.separator + "destinations" + File.separator;
 	}
 	
+	
+	private String getRelPath() {
+		return File.separator + "WebProjekat" + 
+	           File.separator + "img" + 
+	           File.separator + "destinations" + 
+			   File.separator;
+	}
+ 	
 }

@@ -39,14 +39,14 @@ public class StartupListener implements ServletContextListener {
 			i.printStackTrace();
 		}
 	}
-
+ 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		System.out.println("About to start webapp...");
 		System.out.println("Loading DataContext...");
 
 		ServletContext ctx = arg0.getServletContext();
-		DataContext dctx = new DataContext();		
+		DataContext dctx = new DataContext();
 		String path = ctx.getRealPath("") + "/data/dataContext.ser";
 		if (fileExists(path)) {
 			try {

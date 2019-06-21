@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
-import model.DataContext;
 import model.User;
 
 /*
@@ -61,11 +60,8 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 		}
 	}
 	
-	
 	private User getLoggedUser(SecurityContext sctx) {
-		String username = sctx.getUserPrincipal().getName();
-		DataContext dctx = (DataContext) ctx.getAttribute("data");
-		return dctx.getUsers().get(username);
+		return ((LoggedUser) sctx.getUserPrincipal()).getUser();
 	}
-
+	
 }	

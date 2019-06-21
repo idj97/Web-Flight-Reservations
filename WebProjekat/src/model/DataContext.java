@@ -8,11 +8,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DataContext implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Person> persons;
-	
+
+	private ConcurrentHashMap<String, User> activeTokens;
 	private ConcurrentHashMap<String, User> users;
 	private ConcurrentHashMap<String, Destination> destinations;
 	private ConcurrentHashMap<String, Flight> flights;
-	
+
 	public DataContext() {
 		super();
 	}
@@ -22,6 +23,7 @@ public class DataContext implements Serializable {
 		users = new ConcurrentHashMap<>();
 		destinations = new ConcurrentHashMap<>();
 		flights = new ConcurrentHashMap<>();
+		activeTokens = new ConcurrentHashMap<>();
 	}
 
 	public List<Person> getPersons() {
@@ -54,6 +56,14 @@ public class DataContext implements Serializable {
 
 	public void setFlights(ConcurrentHashMap<String, Flight> flights) {
 		this.flights = flights;
+	}
+
+	public ConcurrentHashMap<String, User> getActiveTokens() {
+		return activeTokens;
+	}
+
+	public void setActiveTokens(ConcurrentHashMap<String, User> activeTokens) {
+		this.activeTokens = activeTokens;
 	}
 
 }

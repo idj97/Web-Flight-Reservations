@@ -31,8 +31,8 @@ public class UserDTO implements Serializable {
 		this.role = role;
 	}
 	
-	public UserDTO(User u) {
-		this(u.getUname(), u.getSurname(), u.getPhone(), u.getEmail(), u.getPicturePath(), u.getToken(), u.getRole());
+	public UserDTO(User u, String token) {
+		this(u.getUname(), u.getSurname(), u.getPhone(), u.getEmail(), u.getPicturePath(), token, u.getRole());
 	}
 
 	public String getName() {

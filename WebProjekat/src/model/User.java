@@ -1,13 +1,12 @@
 package model;
 
 import java.io.Serializable;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 import security.AuthRole;
 
-public class User implements Principal, Serializable {
+public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String uname;
 	private String surname;
@@ -20,7 +19,6 @@ public class User implements Principal, Serializable {
 	private String username;
 	private String password;
 	private AuthRole role;
-	private transient String token;
 
 	public User() {
 		super();
@@ -107,19 +105,6 @@ public class User implements Principal, Serializable {
 
 	public void setRole(AuthRole role) {
 		this.role = role;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	@Override
-	public String getName() {
-		return username;
 	}
 
 	public List<Reservation> getReservations() {

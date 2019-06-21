@@ -4,17 +4,15 @@ import java.security.Principal;
 
 import javax.ws.rs.core.SecurityContext;
 
-import model.User;
-
 public class RequestSecurityContext implements SecurityContext {
-	private User user;
+	private LoggedUser user;
 	private boolean secure;
 
 	public RequestSecurityContext() {
 		super();
 	}
 
-	public RequestSecurityContext(User user, boolean secure) {
+	public RequestSecurityContext(LoggedUser user, boolean secure) {
 		super();
 		this.user = user;
 		this.secure = secure;
@@ -38,6 +36,14 @@ public class RequestSecurityContext implements SecurityContext {
 	@Override
 	public boolean isUserInRole(String arg0) {
 		return true;
+	}
+
+	public LoggedUser getUser() {
+		return user;
+	}
+
+	public void setUser(LoggedUser user) {
+		this.user = user;
 	}
 
 }

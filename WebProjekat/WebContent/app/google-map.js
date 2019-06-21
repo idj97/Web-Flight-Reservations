@@ -1,4 +1,4 @@
-Vue.component("google-map",{
+Vue.component("google-map", {
     template:
     `
     <div>
@@ -9,7 +9,7 @@ Vue.component("google-map",{
                   <h5 class="modal-title">Destination location</h5>
                 </div>
                 <div class="modal-body">
-                  <div id="google-map"> </div>
+                  <div id="mapa"> </div>
                 </div>
             </div>
           </div>
@@ -19,7 +19,7 @@ Vue.component("google-map",{
     methods: {
         render: function(lat, log) {
             var myLatLng = {lat: lat, lng: log};
-            var map = new google.maps.Map(document.getElementById('google-map'), {
+            var map = new google.maps.Map(document.getElementById('mapa'), {
                 zoom: 4,
                 center: myLatLng
             });

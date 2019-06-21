@@ -16,6 +16,15 @@ import javax.ws.rs.ext.Provider;
 import model.DataContext;
 import model.User;
 
+/*
+ * Web resources:
+ *  1) https://stackoverflow.com/questions/26777083/best-practice-for-rest-token-based-authentication-with-jax-rs-and-jersey
+ *  2) https://blog.dejavu.sk/binding-jax-rs-providers-to-resource-methods/
+ *  3) https://blog.dejavu.sk/registering-resources-and-providers-in-jersey-2/
+ *  4) https://github.com/cassiomolin/jersey-jwt
+ */
+
+
 @Secured
 @Provider
 @Priority(Priorities.AUTHENTICATION)
@@ -26,20 +35,17 @@ public class AuthenticationFilter implements ContainerRequestFilter	{
 	
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		System.out.println("AUTHENTICATION FILTER");
 		String authHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-		
 		
 		if (checkAuthHeader(authHeader)) {
 			DataContext dctx = (DataContext)ctx.getAttribute("data");
 			String token = authHeader.substring(7);
-			for (User u : dctx.getUsers().values()) {
-				if (u.getToken() != null && u.getToken().equals(token)) {
-					SecurityContext sctx = requestContext.getSecurityContext();
-					RequestSecurityContext rsctx = new RequestSecurityContext(u, sctx.isSecure());
-					requestContext.setSecurityContext(rsctx);
-					return;
-				}
+			if (dctx.getActiveTokens().containsKey(token)) {
+				User u = dctx.getActiveTokens().get(token);
+				SecurityContext sctx = requestContext.getSecurityContext();
+				RequestSecurityContext rsctx = new RequestSecurityContext(new LoggedUser(u, token), sctx.isSecure());
+				requestContext.setSecurityContext(rsctx);
+				return;
 			}
 		}
 		

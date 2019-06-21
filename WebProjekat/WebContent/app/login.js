@@ -8,14 +8,14 @@ Vue.component("login", {
 	template: `
 	<div>
 		<h1> LOGIN COMPONENT </h1>
-		<a href='#/register'>register</a>
-
 		<label for="usernameInput">Username:</label>
 		<input v-model="username" type="text" name="username"></input><br>
 
 		<label for="passwordInput">Password:</label>
 		<input v-model="password" type="password" name="password"></input> <br>
 		<button v-on:click="login">Login</button>
+		<br>
+		<a href='#/register'>register</a>
 	</div>`,
 
 	methods: {
@@ -50,7 +50,7 @@ Vue.component("login", {
 		var user = localStorage.getItem("user");
 		if (user != null) {
 			user = JSON.parse(user);
-			loginSuccess(user);
+			this.loginSuccess(user);
 		}
 	}
 });
