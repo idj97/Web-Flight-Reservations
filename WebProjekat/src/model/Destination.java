@@ -117,4 +117,11 @@ public class Destination implements Serializable {
 		this.endFlights = endFlights;
 	}
 
+	@Override
+	public String toString() {
+		return "Destination [name=" + name + ", state=" + state + ", airportName=" + airportName + ", airportCode="
+				+ airportCode + ", lat=" + lat + ", log=" + log + ", picturePath=" + picturePath + ", archived="
+				+ archived + "]";
+	}
+	
 }

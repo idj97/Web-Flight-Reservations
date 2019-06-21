@@ -99,9 +99,8 @@ public class DestinationController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response editDestination(@Valid EditDestinationDTO dest) {
-		Destination d = getDataContext().getDestinations().get(dest.getOldName());
+		Destination d = getDataContext().getDestinations().get(dest.getName());
 		if (d != null) {
-			d.setName(dest.getName());
 			d.setState(dest.getState());
 			d.setAirportName(dest.getAirportName());
 			d.setAirportCode(dest.getAirportCode());

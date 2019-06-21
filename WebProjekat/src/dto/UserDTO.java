@@ -14,13 +14,14 @@ public class UserDTO implements Serializable {
 	private String picturePath;
 	private String token;
 	private AuthRole role;
+	private boolean blocked;
 
 	public UserDTO() {
 		super();
 	}
 
 	public UserDTO(String name, String surname, String phone, String email, String picturePath, String token,
-			AuthRole role) {
+			AuthRole role, boolean blocked) {
 		super();
 		this.name = name;
 		this.surname = surname;
@@ -29,10 +30,12 @@ public class UserDTO implements Serializable {
 		this.picturePath = picturePath;
 		this.token = token;
 		this.role = role;
+		this.blocked = blocked;
 	}
-	
+
 	public UserDTO(User u, String token) {
-		this(u.getUname(), u.getSurname(), u.getPhone(), u.getEmail(), u.getPicturePath(), token, u.getRole());
+		this(u.getUname(), u.getSurname(), u.getPhone(), u.getEmail(), u.getPicturePath(), token, u.getRole(),
+				u.isBlocked());
 	}
 
 	public String getName() {
@@ -89,6 +92,14 @@ public class UserDTO implements Serializable {
 
 	public void setRole(AuthRole role) {
 		this.role = role;
+	}
+
+	public boolean isBlocked() {
+		return blocked;
+	}
+
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
 	}
 
 }
