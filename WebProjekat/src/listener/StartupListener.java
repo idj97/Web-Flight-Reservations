@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import common.SequenceNumberGenerator;
 import model.DataContext;
 import model.User;
 import security.AuthRole;
@@ -27,6 +28,7 @@ public class StartupListener implements ServletContextListener {
 		
 		ServletContext ctx = arg0.getServletContext();
 		DataContext dctx = (DataContext) ctx.getAttribute("data");
+		dctx.setReservationNumber(SequenceNumberGenerator.getNumber());
 		String path = ctx.getRealPath("") + "/data/dataContext.ser";
 		System.out.println(path);
 		try {
@@ -68,6 +70,7 @@ public class StartupListener implements ServletContextListener {
 		}
 
 		ctx.setAttribute("data", dctx);
+		SequenceNumberGenerator.setNumber(dctx.getReservationNumber());
 		
 		path = ctx.getRealPath("") + File.separator + "data" + File.separator + "admins.csv";
 		try (BufferedReader br = new BufferedReader(new FileReader(path))) {

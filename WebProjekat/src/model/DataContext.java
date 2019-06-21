@@ -1,37 +1,27 @@
 package model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DataContext implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private List<Person> persons;
 
 	private ConcurrentHashMap<String, User> activeTokens;
 	private ConcurrentHashMap<String, User> users;
 	private ConcurrentHashMap<String, Destination> destinations;
 	private ConcurrentHashMap<String, Flight> flights;
+	private Long reservationNumber;
 
 	public DataContext() {
 		super();
 	}
 
 	public void init() {
-		persons = new ArrayList<>();
 		users = new ConcurrentHashMap<>();
 		destinations = new ConcurrentHashMap<>();
 		flights = new ConcurrentHashMap<>();
 		activeTokens = new ConcurrentHashMap<>();
-	}
-
-	public List<Person> getPersons() {
-		return persons;
-	}
-
-	public void setPersons(List<Person> persons) {
-		this.persons = persons;
+		reservationNumber = (long) 0;
 	}
 
 	public ConcurrentHashMap<String, User> getUsers() {
@@ -60,6 +50,14 @@ public class DataContext implements Serializable {
 
 	public ConcurrentHashMap<String, User> getActiveTokens() {
 		return activeTokens;
+	}
+
+	public Long getReservationNumber() {
+		return reservationNumber;
+	}
+
+	public void setReservationNumber(Long reservationNumber) {
+		this.reservationNumber = reservationNumber;
 	}
 
 	public void setActiveTokens(ConcurrentHashMap<String, User> activeTokens) {

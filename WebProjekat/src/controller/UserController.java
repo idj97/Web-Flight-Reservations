@@ -20,6 +20,7 @@ import javax.ws.rs.core.SecurityContext;
 import dto.UserDTO;
 import model.DataContext;
 import model.User;
+import security.Secured;
 
 @Path("/users")
 public class UserController {
@@ -60,15 +61,10 @@ public class UserController {
 		}
 		return Response.status(Status.BAD_REQUEST).build();
 	}
-	
-	
-	
-	
+
 	
 	private DataContext getDataContext() {
 		return (DataContext) ctx.getAttribute("data");
 	}
-	
-	
 	
 }
