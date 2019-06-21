@@ -1,6 +1,17 @@
 Vue.component("flights", {
   data: function() {
     return {
+    	search:{
+    		basicSearch:{
+    			date: "",
+    			start: "",
+    			end: ""
+    		},
+    		number: "",
+    		type: ""
+    		
+    		
+    	},
     	flightToEdit:{
     		number: "",
     		price: 0,
@@ -35,6 +46,31 @@ Vue.component("flights", {
   },
   template:`
   <div>
+	<div id="search">				
+	  		<label for="numberS"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspNumber :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b></label>
+        	<input type="text" v-model:value="search.number" id="numberS"/>
+	
+	
+	  		<label for="startDestinationS"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspStart destination :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b></label>
+        	<input type="text" v-model:value="search.basicSearch.start" id="startDestinationS"/>
+        				  
+        	<label for="endDestinationS"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspEnd destination :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b></label>
+        	<input type="text" v-model:value="search.basicSearch.end" id="endDestinationS"/>
+        				  
+        	<label for="typeS"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFlight type :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b></label>
+        	<select v-model:value="search.type" id="typeS"><option></option><option>CHARTER</option><option>REGIONAL</option><option>OVERSEA</option></select>
+        				  
+        	<label for="dateS"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspDate :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b></label>
+        	<input type="date" v-model:value="search.basicSearch.date" id="dateS"/>			  
+        				  
+        				  
+        	<button class="btn btn-dark" v-on:click="">Search</button>			  
+        				  
+        				  
+        				  
+        				  
+        				  
+	</div>
     <div>
 	  <table class="table table-cover">
             <tr>
@@ -65,6 +101,8 @@ Vue.component("flights", {
                 <td> <a class="form-control" href="#" v-on:click="showEditModal(f)"> Edit </a> </td>
                 <td> <a class="form-control" href="#" v-on:click="deleteFlight(f)"> Delete </a> </td>
             </tr>
+            
+            
         </table>
         
         <button id="addModal" v-on:click="addM()" type="button" class="btn btn-info">Add flight</button>
@@ -214,10 +252,11 @@ Vue.component("flights", {
 	  },
 	  
 	  editFlight: function() {
-		  console.log("ef");
+		  console.log(this.flightToEdit);
 		  axios.put("/WebProjekat/api/flights", this.flightToEdit)
           .then(response => {
         	  toastr.success("Flight edited successfuly.");
+        	  $("#editFlightModal").modal("toggle");
         	  this.getFlights();
           })
           .catch(response => {
@@ -246,7 +285,18 @@ Vue.component("flights", {
   	addM: function() {
   		$("#addFlightModal").modal();
   		this.getDestinations();
-  	  }
+  	  },
+  	search: function() {
+  		console.log(this.search);
+		  axios.get("/WebProjekat/api/combinedSearch", this.search, {headers: {"responseType":"json"}})
+        .then(response => {
+      	  this.destinations = [];
+            this.destinations = response.data;
+        })
+        .catch(response => {
+            toastr.error("Something went wrong.");
+        });
+	  },
   	  },
   mounted: function() {
 	  this.getFlights();
