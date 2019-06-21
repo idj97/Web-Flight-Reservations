@@ -20,7 +20,6 @@ import javax.ws.rs.core.SecurityContext;
 import dto.UserDTO;
 import model.DataContext;
 import model.User;
-import security.Secured;
 
 @Path("/users")
 public class UserController {

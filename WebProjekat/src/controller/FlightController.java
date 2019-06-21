@@ -148,6 +148,7 @@ public class FlightController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response combinedSearch(@Valid CombinedSearchDTO dto) {
+		System.out.println(dto);
 		List<Flight> basicResults = privateBasicSearch(dto.getBasicSearch());
 		List<FlightDTO> combined = new ArrayList<>();
 		for (Flight f : basicResults) {

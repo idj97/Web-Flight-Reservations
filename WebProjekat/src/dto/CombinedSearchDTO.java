@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 public class CombinedSearchDTO {
 	@Valid
+	@NotNull
 	private BasicSearchDTO basicSearch;
 	@NotNull
 	private String flightType;
@@ -33,6 +34,14 @@ public class CombinedSearchDTO {
 	public void setFlightNumber(String flightNumber) {
 		this.flightNumber = flightNumber;
 	}
+
+	@Override
+	public String toString() {
+		return "CombinedSearchDTO [basicSearch=" + basicSearch + ", flightType=" + flightType + ", flightNumber="
+				+ flightNumber + "]";
+	}
+	
+	
 	
 	
 		
