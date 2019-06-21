@@ -59,6 +59,7 @@ public class DestinationController {
 			@NotNull @FormDataParam("image") InputStream image,
 			@NotNull @FormDataParam("image") FormDataContentDisposition imageDesc) {
 		if (getDataContext().getDestinations().get(name) == null) {
+			System.out.println(image + " " + imageDesc);
 			String serverPath = getPath() + imageDesc.getFileName();
 			String relPath = getRelPath() + imageDesc.getFileName();
 			ImageHandler.saveImage(image, imageDesc, serverPath);

@@ -8,12 +8,14 @@ import javax.validation.constraints.NotBlank;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -85,6 +87,7 @@ public class AuthenticationController {
 	}
 	
 	
+	
 	@POST
 	@Secured
 	@Path("/logout")
@@ -94,6 +97,7 @@ public class AuthenticationController {
 		System.out.println("Logged user count:" + getDataContext().getActiveTokens().size());
 		return Response.ok().build();
 	}
+
 	
 	
 	@GET
@@ -104,6 +108,21 @@ public class AuthenticationController {
 		User u = getLoggedUser();
 		String token = getToken();
 		return Response.ok(new ResponseDTO<UserDTO>(new UserDTO(u, token), "no-message")).build();
+	}
+	
+	
+	
+	@PUT
+	@Secured
+	@Path("/change-password/{old}/{fresh}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response changePassword(@NotBlank @PathParam("old") String old, @NotBlank @PathParam("fresh") String fresh) {
+		User u = getLoggedUser();
+		if (u.getPassword().equals(old)) {
+			u.setPassword(fresh);
+			return Response.status(Status.OK).build();
+		}
+		return Response.status(Status.BAD_REQUEST).build();
 	}
 	
 	
