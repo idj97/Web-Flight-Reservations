@@ -24,7 +24,7 @@ Vue.component("flights", {
     <div>
 	  <table class="table table-cover">
             <tr>
-                <th> Id </th>
+                <th> Number </th>
                 <th> Start </th>
                 <th> End </th>
                 <th> Date </th>
@@ -36,16 +36,16 @@ Vue.component("flights", {
                 <th> Economy </th>
             </tr>
             <tr v-for="f in flights">
-                <td> {{ f.id }} </td>
-                <td> {{ f.start.name }} </td>
-                <td> {{ f.end.name }} </td>
+                <td> {{ f.number }} </td>
+                <td> {{ f.start }} </td>
+                <td> {{ f.end }} </td>
                 <td> {{ f.date }} </td>
                 <td> {{ f.price }} </td>
                 <td> {{ f.type }} </td>
                 <td> {{ f.airplane }} </td>
-                <td> {{ f.business }} </td>
-                <td> {{ f.first }} </td>
-                <td> {{ f.economy }} </td>
+                <td> {{ f.businessSize }} </td>
+                <td> {{ f.firstSize }} </td>
+                <td> {{ f.economySize }} </td>
                 <td> <a href="#" v-on:click="editFlight(f)"> Edit </a> </td>
                 <td> <a href="#" v-on:click="deleteFlight(f)"> Delete </a> </td>
             </tr>
@@ -169,7 +169,7 @@ Vue.component("flights", {
           //var formData = new FormData(form);
           //if (this.validateForm(formData)) {
 		  	  console.log(this.flightToAdd);
-              axios.post("/WebProjekat/api/flights", this.flightToAdd, {headers:{"Content-Type":"json"}})
+              axios.post("/WebProjekat/api/flights", this.flightToAdd)
                    .then(response => {
                        toastr.success("Flight added.")
                        this.destinations.push(response.data);
