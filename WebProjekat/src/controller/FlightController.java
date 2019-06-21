@@ -9,7 +9,6 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -24,10 +23,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
+import dto.BasicSearchDTO;
+import dto.CombinedSearchDTO;
 import dto.FlightDTO;
 import model.DataContext;
 import model.Destination;
 import model.Flight;
+import security.AuthRole;
+import security.Secured;
 
 @Path("/flights")
 public class FlightController {
@@ -128,18 +131,42 @@ public class FlightController {
 	
 	
 	@GET
-	@Path("/search/{start}/{end}/{date}")
+	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response basicSearch(@NotNull @PathParam("start") String start, @NotNull @PathParam("end") String end,
-			@PathParam("date") String date) {
+	public Response basicSearch(@Valid BasicSearchDTO dto) {
 		List<FlightDTO> results = new ArrayList<>();
-		for (Flight f : getDataContext().getFlights().values()) {
-			if (searchHit(f, start, end, date)) 
-				results.add(new FlightDTO(f));
+		for (Flight f : privateBasicSearch(dto))
+			results.add(new FlightDTO(f));
+		return Response.ok().build();
+	}
+	
+	
+	
+	@GET
+	@Path("/combinedSearch")
+	@Secured(role=AuthRole.ADMIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response combinedSearch(@Valid CombinedSearchDTO dto) {
+		List<Flight> basicResults = privateBasicSearch(dto.getBasicSearch());
+		List<FlightDTO> combined = new ArrayList<>();
+		for (Flight f : basicResults) {
+			if (filterFlight(f, dto)) {
+				combined.add(new FlightDTO(f));
+			}
 		}
 		return Response.ok().build();
 	}
 	
+	
+	
+	private List<Flight> privateBasicSearch(BasicSearchDTO dto) {
+		List<Flight> results = new ArrayList<>();
+		for (Flight f : getDataContext().getFlights().values())
+			if (searchHit(f, dto.getStart(), dto.getEnd(), dto.getDate())) 
+				results.add(f);
+		return results;
+	}
 	
 	
 	
@@ -149,18 +176,36 @@ public class FlightController {
 		end = end.toLowerCase();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
+		// datumi se ne poklapaju
 		if (!sdf.format(f.getDate()).equals(date))
 			return false;
 		
+		// pocetna ili krajnja destinacija je arhivirana
 		if (f.getStart().isArchived() || f.getEnd().isArchived())
 			return false;
 		
+		// start i end se sadrze u imenu ili drzavi odgovarajuce destinacije
 		if (f.getStart().getName().toLowerCase().contains(start) || f.getStart().getState().toLowerCase().contains(start) ||
 				f.getEnd().getName().toLowerCase().contains(end) || f.getEnd().getState().toLowerCase().contains(end))
 			return true;
 		
 		return false;
 	}
+	
+	
+	
+	private boolean filterFlight(Flight f, CombinedSearchDTO dto) {
+		// ako trazeni tip nije sadrzan u tipu leta
+		if (!f.getType().name().contains(dto.getFlightType()))
+			return false;
+		
+		// ako je broj leta razlicit od praznog string i ako je razlicit od broja leta
+		if (dto.getFlightNumber() != "" && dto.getFlightNumber().equals(f.getNumber()))
+			return false;
+		
+		return true;
+	}
+	
 	
 
 	

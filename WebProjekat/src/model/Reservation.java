@@ -3,8 +3,6 @@ package model;
 import java.io.Serializable;
 import java.util.Date;
 
-import common.SequenceNumberGenerator;
-
 public class Reservation implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long number; 
