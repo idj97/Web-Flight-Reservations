@@ -137,13 +137,13 @@ public class FlightController {
 		List<FlightDTO> results = new ArrayList<>();
 		for (Flight f : privateBasicSearch(dto))
 			results.add(new FlightDTO(f));
-		return Response.ok().build();
+		return Response.ok(results).build();
 	}
 	
 	
 	
 	@GET
-	@Path("/combinedSearch")
+	@Path("/combinedSearch")  
 	@Secured(role=AuthRole.ADMIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -156,7 +156,7 @@ public class FlightController {
 				combined.add(new FlightDTO(f));
 			}
 		}
-		return Response.ok().build();
+		return Response.ok(combined).build();
 	}
 	
 	
@@ -178,7 +178,7 @@ public class FlightController {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		// datumi se ne poklapaju
-		if (!sdf.format(f.getDate()).equals(date))
+		if (!sdf.format(f.getDate()).contains(date))
 			return false;
 		
 		// pocetna ili krajnja destinacija je arhivirana
@@ -186,8 +186,8 @@ public class FlightController {
 			return false;
 		
 		// start i end se sadrze u imenu ili drzavi odgovarajuce destinacije
-		if (f.getStart().getName().toLowerCase().contains(start) || f.getStart().getState().toLowerCase().contains(start) ||
-				f.getEnd().getName().toLowerCase().contains(end) || f.getEnd().getState().toLowerCase().contains(end))
+		if ((f.getStart().getName().toLowerCase().contains(start) || f.getStart().getState().toLowerCase().contains(start)) 
+				&& (f.getEnd().getName().toLowerCase().contains(end) || f.getEnd().getState().toLowerCase().contains(end)))
 			return true;
 		
 		return false;
@@ -201,7 +201,7 @@ public class FlightController {
 			return false;
 		
 		// ako je broj leta razlicit od praznog string i ako je razlicit od broja leta
-		if (dto.getFlightNumber() != "" && dto.getFlightNumber().equals(f.getNumber()))
+		if (!dto.getFlightNumber().equals("") && !dto.getFlightNumber().equals(f.getNumber()))
 			return false;
 		
 		return true;
