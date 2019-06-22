@@ -27,22 +27,22 @@ Vue.component("flights-user", {
 	
 	  		<div width="60%">
 	  		<label for="startDestinationS"><b>Start destination :</b></label>
-        	<input type="text" v-model:value="search.basicSearch.start" id="startDestinationS"/>
+        	<input type="text" v-model:value="search.start" id="startDestinationS"/>
         				  
         	<label for="endDestinationS"><b>End destination :</b></label>
-        	<input type="text" v-model:value="search.basicSearch.end" id="endDestinationS"/>
+        	<input type="text" v-model:value="search.end" id="endDestinationS"/>
         	
         	<label for="dateS"><b>Date :</b></label>
-        	<input type="date" v-model:value="search.basicSearch.date" id="dateS"/>
+        	<input type="date" v-model:value="search.date" id="dateS"/>
         	
-        	<button class="btn btn-dark" v-on:click="searchFlights()">Search</button>
+        	<button class="btn btn-dark" v-on:click="searchFlightsAsUser()">Search</button>
         	</div>
         	<div width="40%">
         	<label for="numberS"><b>Number :</b></label>
-        	<input type="text" v-model:value="filter.number" id="numberS"/>
+        	<input type="text" v-model:value="filter.flightNumber" id="numberS"/>
         	
         	<label for="typeS"><b>Flight type :</b></label>
-        	<select v-model:value="filter.type" id="typeS"><option></option><option>CHARTER</option><option>REGIONAL</option><option>OVERSEA</option></select>
+        	<select v-model:value="filter.flightType" id="typeS"><option></option><option>CHARTER</option><option>REGIONAL</option><option>OVERSEA</option></select>
         	
         	<button class="btn btn-dark" v-on:click="filterFlights()">Filter</button>
         	</div>			  
@@ -121,7 +121,7 @@ Vue.component("flights-user", {
 	  },
 	  searchFlightsAsUser: function() {
 	  		console.log(this.search);
-			  axios.get("/WebProjekat/api/flights/basicSearch", this.search, {headers: {"responseType":"json"}})
+			  axios.post("/WebProjekat/api/flights/search", this.search, {headers: {"responseType":"json"}})
 	        .then(response => {
 	      	  this.flights = [];
 	          this.flights = response.data;
