@@ -22,6 +22,10 @@ Vue.component(
               <li class="nav-item">
                 <a class="nav-link" href="#" v-on:click="setCurrentComponent('my-profile')">My profile</a>
               </li>
+              
+              <li class="nav-item">
+                <a class="nav-link" href="#" v-on:click="setCurrentComponent('my-reservation')">My reservations</a>
+              </li>
               <logout></logout>
             </ul>
           </div>
