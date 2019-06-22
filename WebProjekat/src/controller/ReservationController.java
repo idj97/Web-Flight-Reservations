@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -36,6 +37,7 @@ public class ReservationController {
 	
 	@Context
 	SecurityContext sctx;
+	
 	
 	
 	@GET
@@ -73,6 +75,26 @@ public class ReservationController {
 	}
 	
 	
+	
+	
+	@PUT
+	@Secured
+	@Path("/cancel/{resId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response cancel(@PathParam("resId") Long resId) {
+		User u = getLoggedUser();
+		if (u.getReservations().containsKey(resId)) {
+			Reservation r = u.getReservations().get(resId);
+			Flight f = r.getFlight();
+			u.getReservations().remove(resId);
+			f.getReservations().remove(resId);
+			return Response.ok().build();
+		}
+		return Response.status(Status.BAD_REQUEST).build();
+	}
+	
+	
+	
 	@GET
 	@Secured
 	@Path("/{flightId}")
@@ -88,8 +110,12 @@ public class ReservationController {
 	
 	
 	
+	
 	private boolean verifyCreate(ReservationDTO dto) {
 		Flight f = getDataContext().getFlights().get(dto.getFlightNum());
+		if (f == null)
+			return false;
+		
 		if (dto.getType().equals(ReservationType.FIRST))
 			return f.getFirstSize() >= dto.getPassengerNum();
 		else if (dto.getType().equals(ReservationType.BUSINESS))
@@ -100,10 +126,10 @@ public class ReservationController {
 	
 	
 	
-	
 	private DataContext getDataContext() {
 		return (DataContext) ctx.getAttribute("data");
 	}
+	
 	
 	
 	private User getLoggedUser() {
