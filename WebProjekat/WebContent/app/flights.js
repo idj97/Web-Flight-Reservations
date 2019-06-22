@@ -6,9 +6,9 @@ Vue.component("flights", {
     			date: "",
     			start: "",
     			end: ""
-    		},
+    		},filter:{
     		flightNumber: "",
-    		flightType: ""
+    		flightType: ""}
     		
     		
     	},
@@ -48,7 +48,7 @@ Vue.component("flights", {
   <div>
 	<div id="search">				
 	  		<label for="numberS"><b>Number :</b></label>
-        	<input type="text" v-model:value="search.flightNumber" id="numberS"/>
+        	<input type="text" v-model:value="search.filter.flightNumber" id="numberS"/>
 	
 	
 	  		<label for="startDestinationS"><b>Start destination :</b></label>
@@ -58,7 +58,7 @@ Vue.component("flights", {
         	<input type="text" v-model:value="search.basicSearch.end" id="endDestinationS"/>
         				  
         	<label for="typeS"><b>Flight type :</b></label>
-        	<select v-model:value="search.flightType" id="typeS"><option></option><option>CHARTER</option><option>REGIONAL</option><option>OVERSEA</option></select>
+        	<select v-model:value="search.filter.flightType" id="typeS"><option></option><option>CHARTER</option><option>REGIONAL</option><option>OVERSEA</option></select>
         				  
         	<label for="dateS"><b>Date :</b></label>
         	<input type="date" v-model:value="search.basicSearch.date" id="dateS"/>			  
@@ -287,9 +287,9 @@ Vue.component("flights", {
   		this.getDestinations();
   	  },
   	searchFlights: function() {
-		  axios.post("/WebProjekat/api/flights/combinedSearch", this.search, {headers: {"responseType":"json","Content-Type":"application/json"}})
+  		console.log(this.search);
+		  axios.post("/WebProjekat/api/flights/combinedSearch", this.search, {headers: {"responseType":"json"}})
         .then(response => {
-          console.log(response.data);
       	  this.flights = [];
           this.flights = response.data;
         })

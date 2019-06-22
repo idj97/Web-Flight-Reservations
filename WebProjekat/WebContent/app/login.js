@@ -60,7 +60,7 @@ Vue.component("login", {
 		register: function(e){
 			var form = document.getElementById("register-form");
 			var formData = new FormData(form);
-
+			console.log(formData);
 			axios.post("/WebProjekat/api/auth/register", formData, {headers: {"Content-Type":"multipart/form-data"}})
 				 .then(
 				 	response => {
