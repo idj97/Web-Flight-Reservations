@@ -30,7 +30,7 @@ import model.User;
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter	{
 	
-	@Context	
+	@Context
 	ServletContext ctx;
 	
 	@Override

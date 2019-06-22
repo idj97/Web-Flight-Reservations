@@ -69,6 +69,7 @@ public class ReservationController {
 			Flight f = getDataContext().getFlights().get(dto.getFlightNum());
 			f.getReservations().put(reservationId, r);
 			r.setFlight(f);
+			r.setPassengerNumber(dto.getPassengerNum());
 			return Response.ok(new ReservationDTO(r)).build();
 		}
 		return Response.status(Status.BAD_REQUEST).build();
@@ -95,17 +96,13 @@ public class ReservationController {
 	
 	
 	
-	@GET
-	@Secured
-	@Path("/{flightId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response isPassenger(@PathParam("flightId") String flightId) {
+	public boolean isPassenger(String flightId) {
 		Flight f = getDataContext().getFlights().get(flightId);
 		User u = getLoggedUser();
 		for (Reservation r : f.getReservations().values())
 			if (r.getOwner() == u)
-				return Response.status(Status.BAD_REQUEST).build();
-		return Response.ok().build();
+				return true;
+		return false;
 	}
 	
 	
@@ -114,6 +111,9 @@ public class ReservationController {
 	private boolean verifyCreate(ReservationDTO dto) {
 		Flight f = getDataContext().getFlights().get(dto.getFlightNum());
 		if (f == null)
+			return false;
+		
+		if (isPassenger(dto.getFlightNum())) 
 			return false;
 		
 		if (dto.getType().equals(ReservationType.FIRST))

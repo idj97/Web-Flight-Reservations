@@ -10,6 +10,7 @@ public class Reservation implements Serializable {
 	private ReservationType type;
 	private Flight flight;
 	private User owner;
+	private int passengerNumber;
 
 	public Reservation() {
 		super();
@@ -59,6 +60,14 @@ public class Reservation implements Serializable {
 
 	public void setOwner(User owner) {
 		this.owner = owner;
+	}
+
+	public int getPassengerNumber() {
+		return passengerNumber;
+	}
+
+	public void setPassengerNumber(int passengerNumber) {
+		this.passengerNumber = passengerNumber;
 	}
 
 }

@@ -48,7 +48,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 	
 	
 	private AuthRole extractRoles(AnnotatedElement method) {
-		// resource method can return null so additional checks are required
+		// moze da vrati null ako putanja resursa koju zelimo da pogodimo nije prepoznata
 		if (method == null)
 			return AuthRole.USER;
 		else {

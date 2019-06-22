@@ -34,7 +34,9 @@ public class ReservationDTO {
 		this.number = r.getNumber();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		this.dateCreated = sdf.format(r.getDateCreated());
+		this.passengerNum = r.getPassengerNumber();
 		this.type = r.getType();
+		this.flightNum = r.getFlight().getNumber();
 	}
 
 	public long getNumber() {
