@@ -17,18 +17,18 @@ Vue.component("my-profile", {
   template:`
     <div class="myProfileDiv">
       <label for="firstname"><b>Firstname :</b></label>
-	  <input type="text" class="form-control" id="name">
+	  <input v-model:value="user.name" type="text" class="form-control" id="name">
 			
 	  <label for="surname"><b>Surname :</b></label>
-	  <input type="text" class="form-control" id="surname">
+	  <input v-model:value="user.surname" type="text" class="form-control" id="surname">
 	  
 	  <label for="phone"><b>Phone :</b></label>
-	  <input type="text" class="form-control" id="phone">
+	  <input v-model:value="user.phone" type="text" class="form-control" id="phone">
 			
 	  <label for="email"><b>Email :</b></label>
-	  <input type="text" class="form-control" id="email">
+	  <input v-model:value="user.email" type="text" class="form-control" id="email">
 	  <br>
-	  <button class="btn btn-primary"  onclick="">Save</button>  <button class="btn btn-dark"  data-toggle="modal" data-target="#changePassModal">Change password</button>
+	  <button class="btn btn-primary"  onclick="editMe()">Save</button>  <button class="btn btn-dark"  data-toggle="modal" data-target="#changePassModal">Change password</button>
 	  
 	  
 	  <div class="modal fade" id="changePassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -97,7 +97,17 @@ Vue.component("my-profile", {
     			  return false;
     	  }
     	  return true;
-      }
+      },
+      
+      editMe: function(){
+    	  axios.put("/WebProjekat/api/auth/editUser")
+    	  .then(response => {
+	    	   toastr.info("Data updated.");
+	       })
+	       .catch(response => {
+	    	   toastr.error("Data is not updated.");
+	       });
+ },
 
   },
   mounted: function() {
