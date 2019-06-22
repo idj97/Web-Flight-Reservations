@@ -20,6 +20,8 @@ import javax.ws.rs.core.SecurityContext;
 import dto.UserDTO;
 import model.DataContext;
 import model.User;
+import security.AuthRole;
+import security.Secured;
 
 @Path("/users")
 public class UserController {
@@ -31,7 +33,7 @@ public class UserController {
 	private SecurityContext sctx;
 	
 	@GET
-	//@Secured(role=AuthRole.ADMIN)
+	@Secured(role=AuthRole.ADMIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response get() {
 		List<UserDTO> users = new ArrayList<>();
@@ -51,7 +53,7 @@ public class UserController {
 	
 	@PUT
 	@Path("/block/{username}/{block}")
-	//@Secured(role=AuthRole.ADMIN)
+	@Secured(role=AuthRole.ADMIN)
 	public Response block(@NotBlank @PathParam("username") String username, @NotNull @PathParam("block") Boolean block) {
 		User u = getDataContext().getUsers().get(username);
 		if (u != null) {

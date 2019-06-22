@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -123,6 +124,21 @@ public class AuthenticationController {
 			return Response.status(Status.OK).build();
 		}
 		return Response.status(Status.BAD_REQUEST).build();
+	}
+	
+	
+	
+	@PUT
+	@Secured
+	@Path("/edit-profile")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response editProfile(@Valid UserDTO dto) {
+		User u = getLoggedUser();
+		u.setEmail(dto.getEmail());
+		u.setUname(dto.getName());
+		u.setSurname(dto.getSurname());
+		u.setPhone(dto.getPhone());
+		return Response.ok().build();
 	}
 	
 	

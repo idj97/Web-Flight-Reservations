@@ -2,15 +2,17 @@ package dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+
 import model.User;
 import security.AuthRole;
 
 public class UserDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String name;
-	private String surname;
-	private String phone;
-	private String email;
+	@NotBlank private String name;
+	@NotBlank private String surname;
+	@NotBlank private String phone;
+	@NotBlank private String email;
 	private String picturePath;
 	private String token;
 	private String username;
