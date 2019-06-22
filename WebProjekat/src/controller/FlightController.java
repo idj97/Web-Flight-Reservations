@@ -3,6 +3,8 @@ package controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +27,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import dto.BasicSearchDTO;
 import dto.CombinedSearchDTO;
+import dto.FilterDTO;
 import dto.FlightDTO;
 import model.DataContext;
 import model.Destination;
@@ -48,7 +51,6 @@ public class FlightController {
 	}
 	
 
-	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -130,7 +132,7 @@ public class FlightController {
 	
 	
 	
-	@GET
+	@POST
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response basicSearch(@Valid BasicSearchDTO dto) {
@@ -142,7 +144,27 @@ public class FlightController {
 	
 	
 	
-	@GET
+	
+	@POST
+	@Path("/filter")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response filterSearch(@Valid FilterDTO dto) {
+		List<Flight> results = new ArrayList<>();
+		for (Flight f : getDataContext().getFlights().values())
+			if (filterFlight(f, dto))
+				results.add(f);
+		if (dto.isSort()) sort(results);
+
+		List<FlightDTO> resultsDto = new ArrayList<>();
+		for (Flight f : results) resultsDto.add(new FlightDTO(f));
+		return Response.ok(results).build();
+	}
+	
+	
+	
+	
+	@POST
 	@Path("/combinedSearch")  
 	@Secured(role=AuthRole.ADMIN)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -150,12 +172,16 @@ public class FlightController {
 	public Response combinedSearch(@Valid CombinedSearchDTO dto) {
 		System.out.println(dto);
 		List<Flight> basicResults = privateBasicSearch(dto.getBasicSearch());
-		List<FlightDTO> combined = new ArrayList<>();
+		List<Flight> combined = new ArrayList<>();
 		for (Flight f : basicResults) {
-			if (filterFlight(f, dto)) {
-				combined.add(new FlightDTO(f));
+			if (filterFlight(f, dto.getFilter())) {
+				combined.add(f);
 			}
 		}
+		if (dto.getFilter().isSort()) sort(combined);
+		
+		List<FlightDTO> results = new ArrayList<>();
+		for (Flight f : combined) results.add(new FlightDTO(f));
 		return Response.ok(combined).build();
 	}
 	
@@ -195,7 +221,7 @@ public class FlightController {
 	
 	
 	
-	private boolean filterFlight(Flight f, CombinedSearchDTO dto) {
+	private boolean filterFlight(Flight f, FilterDTO dto) {
 		// ako trazeni tip nije sadrzan u tipu leta
 		if (!f.getType().name().contains(dto.getFlightType()))
 			return false;
@@ -265,6 +291,15 @@ public class FlightController {
 			return false;
 		
 		return true;
+	}
+	
+	
+	private void sort(List<Flight> flights) {
+		Collections.sort(flights, new Comparator<Flight>() {
+			public int compare(Flight f1, Flight f2) {
+				return f1.getDate().compareTo(f2.getDate());
+			}
+		});
 	}
 	
 }

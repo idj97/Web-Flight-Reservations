@@ -6,6 +6,11 @@ Vue.component("my-profile", {
         	surname: "",
         	phone: "",
         	email: ""
+        },
+        
+        passwords: {
+        	old: "",
+        	fresh: ""
         }
     }
   },
@@ -36,15 +41,15 @@ Vue.component("my-profile", {
                 <form id="changePassword">
                 
 					<label for="old_password"><b>Old assword :</b></label>
-			    	<input type="password" class="form-control" name="old_password">
+			    	<input v-model:value="passwords.old" type="password" class="form-control" name="old_password">
 						  
 					<label for="new_password"><b>New assword :</b></label>
-					<input type="password" class="form-control" name="new_password">
+					<input v-model:value="passwords.fresh" type="password" class="form-control" name="new_password">
 						 
                 </form>
               </div>
               <div class="modal-footer">
-                <button v-on:click="" type="button" class="btn btn-primary">Add</button>
+                <button v-on:click="changePassword()" type="button" class="btn btn-primary">Add</button>
                 <button id="close-create-modal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               </div>
             </div>
@@ -67,7 +72,32 @@ Vue.component("my-profile", {
           .catch(response => {
               toastr.error("Something went wrong.");
           });
-	  }
+	  },
+	  
+	  
+	  changePassword: function() {
+		  if (!this.validateObject(this.passwords)) {
+			  toastr.warning("Please enter all fields!");
+			  return;
+		  }
+		  
+		  axios.put(`/WebProjekat/api/auth/change-password/${this.passwords.old}/${this.passwords.fresh}`) 
+		       .then(response => {
+		    	   toastr.info("Password changed.");
+		    	   $("#changePassModal").modal("toggle");
+		       })
+		       .catch(response => {
+		    	   toastr.error("Try again.");
+		       });
+	  },
+	  
+	  validateObject: function(object) {
+    	  for (var key of Object.keys(object)) {
+    		  if (!object[key])
+    			  return false;
+    	  }
+    	  return true;
+      }
 
   },
   mounted: function() {
