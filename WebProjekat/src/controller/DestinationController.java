@@ -28,6 +28,8 @@ import common.ImageHandler;
 import dto.DestinationDTO;
 import model.DataContext;
 import model.Destination;
+import security.AuthRole;
+import security.Secured;
 
 @Path("/destinations")
 public class DestinationController {
@@ -40,6 +42,7 @@ public class DestinationController {
 	
 	
 	@GET
+	@Secured(role = AuthRole.ADMIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response get() {
 		List<DestinationDTO> results = new ArrayList<>();
@@ -52,7 +55,7 @@ public class DestinationController {
 	
 	
 	@POST
-	//@Secured(role=AuthRole.ADMIN)
+	@Secured(role=AuthRole.ADMIN)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response create(
@@ -81,7 +84,7 @@ public class DestinationController {
 
 	
 	@PUT
-	//@Secured(role=AuthRole.ADMIN) 
+	@Secured(role=AuthRole.ADMIN) 
 	@Path("/setImage")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public Response setImage(
@@ -102,7 +105,7 @@ public class DestinationController {
 	
 
 	@PUT
-	//@Secured(role = AuthRole.ADMIN)
+	@Secured(role = AuthRole.ADMIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response editDestination(@Valid DestinationDTO dest) {

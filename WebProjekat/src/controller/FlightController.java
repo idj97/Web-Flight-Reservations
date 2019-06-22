@@ -64,7 +64,7 @@ public class FlightController {
 	
 	
 	@POST
-	//@Secured(role = AuthRole.ADMIN)
+	@Secured(role = AuthRole.ADMIN)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response create(@Valid FlightDTO dto) {
 		if (verifyCreate(dto)) {
@@ -88,7 +88,7 @@ public class FlightController {
 	
 	
 	@PUT
-	//@Secured(role = AuthRole.ADMIN)
+	@Secured(role = AuthRole.ADMIN)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response edit(@Valid FlightDTO dto) {
 		if (verifyEdit(dto)) {
@@ -116,7 +116,7 @@ public class FlightController {
 	
 	
 	@DELETE
-	//@Secured(role = AuthRole.ADMIN)
+	@Secured(role = AuthRole.ADMIN)
 	@Path("/{number}")
 	public Response delete(@NotBlank @PathParam("number") String number) {
 		if (verifyDelete(number)) {
