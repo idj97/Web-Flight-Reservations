@@ -290,8 +290,8 @@ Vue.component("flights", {
   		console.log(this.search);
 		  axios.get("/WebProjekat/api/flights/combinedSearch", this.search, {headers: {"responseType":"json"}})
         .then(response => {
-      	  this.destinations = [];
-          this.destinations = response.data;
+      	  this.flights = [];
+          this.flights = response.data;
         })
         .catch(response => {
             toastr.error("Something went wrong.");
