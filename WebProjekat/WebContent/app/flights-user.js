@@ -1,6 +1,13 @@
 Vue.component("flights-user", {
   data: function() {
     return {
+    	reservation:{
+    		number: 0,
+    		dateCreated: "",
+    		type: "",
+    		passengerNum: 0,
+    		flightNum: ""
+    	},
     	search:{
     		
     			date: "",
@@ -88,7 +95,7 @@ Vue.component("flights-user", {
                 <td> {{ f.businessSize }} </td>
                 <td> {{ f.firstSize }} </td>
                 <td> {{ f.economySize }} </td>
-                <td> <a class="form-control" href="#" v-on:click="reserve(f)"> Reserve </a> </td>
+                <td> <a class="form-control" href="#" v-on:click="reserveModal(f)"> Reserve </a> </td>
                 
             </tr>
             
@@ -98,6 +105,39 @@ Vue.component("flights-user", {
         
 
     </div>
+    
+    <!--modal rezervacija-->
+        <div class="modal fade" id="resModal" role="dialog">
+	  		<div class="modal-dialog modal-sm">
+      			<div class="modal-content">
+        			<div class="modal-header">        			
+          				<h4 class="modal-title">Create reservation</h4>
+          				<button type="button" class="close" data-dismiss="modal">&times;</button>
+        			</div>
+        			<div class="modal-body">
+        				<form id="addFlightForm">
+        				  
+        				  
+        				  <label for="flightNum"><b>Flight number :</b></label>
+        				  <input type="text" v-model:value="reservation.flightNum" class="form-control" id="flightNum" readonly/>
+        				  	
+						  <label for="passengerNum"><b>Seats number :</b></label>
+						  <input v-model:value="reservation.passengerNum" type="number" class="form-control" id="passengerNum">
+						  
+						  <label for="type"><b>Seat type :</b></label>
+        				  <select v-model:value="reservation.type" class="form-control" id="typeAdd"><option>FIRST</option><option>ECONOMY</option><option>BUSINESS</option></select>
+								
+						  
+						</form>
+        			</div>
+        			<div class="modal-footer">
+          				<button type="button" class="btn btn-success" v-on:click="reserve()">Reserve</button>
+          				<button type="button" id="closeAddFlightModal" class="btn btn-danger" data-dismiss="modal">Close</button>
+        			</div>
+      			</div>
+	  		</div>
+	  	  </div>
+	  	</div>
    </div>
   `,
   methods: {
@@ -134,8 +174,26 @@ Vue.component("flights-user", {
 	            toastr.error("Something went wrong.");
 	        });
 		  },
+		  
+		  reserve: function() {
+			  
+		  		console.log(this.reservation);
+				  axios.post("/WebProjekat/api/reservations", this.reservation, {headers: {"responseType":"json"}})
+		        .then(response => {
+		        	toastr.success("Seat/Seats reserved.");
+		        })
+		        .catch(response => {
+		            toastr.error("Something went wrong.");
+		        });
+			  },
+			  
+			  reserveModal: function(flight) {
+			  		$("#resModal").modal();
+			  		this.reservation.flightNum = flight.number;
+				  },
   	  },
   mounted: function() {
+	  
 	  this.getFlights();
 	  
   }
