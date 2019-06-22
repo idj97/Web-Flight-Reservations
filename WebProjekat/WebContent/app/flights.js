@@ -47,20 +47,20 @@ Vue.component("flights", {
   template:`
   <div>
 	<div id="search">				
-	  		<label for="numberS"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspNumber :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b></label>
+	  		<label for="numberS"><b>Number :</b></label>
         	<input type="text" v-model:value="search.number" id="numberS"/>
 	
 	
-	  		<label for="startDestinationS"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspStart destination :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b></label>
+	  		<label for="startDestinationS"><b>Start destination :</b></label>
         	<input type="text" v-model:value="search.basicSearch.start" id="startDestinationS"/>
         				  
-        	<label for="endDestinationS"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspEnd destination :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b></label>
+        	<label for="endDestinationS"><b>End destination :</b></label>
         	<input type="text" v-model:value="search.basicSearch.end" id="endDestinationS"/>
         				  
-        	<label for="typeS"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFlight type :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b></label>
+        	<label for="typeS"><b>Flight type :</b></label>
         	<select v-model:value="search.type" id="typeS"><option></option><option>CHARTER</option><option>REGIONAL</option><option>OVERSEA</option></select>
         				  
-        	<label for="dateS"><b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspDate :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</b></label>
+        	<label for="dateS"><b>Date :</b></label>
         	<input type="date" v-model:value="search.basicSearch.date" id="dateS"/>			  
         				  
         				  
