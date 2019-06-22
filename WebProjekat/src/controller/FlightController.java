@@ -158,7 +158,7 @@ public class FlightController {
 
 		List<FlightDTO> resultsDto = new ArrayList<>();
 		for (Flight f : results) resultsDto.add(new FlightDTO(f));
-		return Response.ok(results).build();
+		return Response.ok(resultsDto).build();
 	}
 	
 	
@@ -182,7 +182,7 @@ public class FlightController {
 		
 		List<FlightDTO> results = new ArrayList<>();
 		for (Flight f : combined) results.add(new FlightDTO(f));
-		return Response.ok(combined).build();
+		return Response.ok(results).build();
 	}
 	
 	

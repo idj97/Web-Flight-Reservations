@@ -11,7 +11,8 @@ Vue.component("flights-user", {
     	filter:{
     		
     		flightNumber: "",
-    		flightType: ""
+    		flightType: "",
+    		sort: false
     		
     		
     	},
@@ -43,6 +44,9 @@ Vue.component("flights-user", {
         	
         	<label for="typeS"><b>Flight type :</b></label>
         	<select v-model:value="filter.flightType" id="typeS"><option></option><option>CHARTER</option><option>REGIONAL</option><option>OVERSEA</option></select>
+        	
+        	<label for="numberS"><b>Sort by date :</b></label>
+        	<input type="checkbox" v-model:value="filter.sort" id="numberS"/>
         	
         	<button class="btn btn-dark" v-on:click="filterFlights()">Filter</button>
         	</div>			  
@@ -110,7 +114,7 @@ Vue.component("flights-user", {
 
   	filterFlights: function() {
   		console.log(this.search);
-		  axios.get("/WebProjekat/api/flights/filter", this.filter, {headers: {"responseType":"json"}})
+		  axios.post("/WebProjekat/api/flights/filter", this.filter, {headers: {"responseType":"json"}})
         .then(response => {
       	  this.flights = [];
           this.flights = response.data;

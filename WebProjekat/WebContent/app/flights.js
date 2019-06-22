@@ -6,9 +6,11 @@ Vue.component("flights", {
     			date: "",
     			start: "",
     			end: ""
-    		},filter:{
-    		flightNumber: "",
-    		flightType: ""}
+    		},
+    		filter:{
+    			flightNumber: "",
+    			flightType: "",
+    			sort: false}
     		
     		
     	},
@@ -61,7 +63,10 @@ Vue.component("flights", {
         	<select v-model:value="search.filter.flightType" id="typeS"><option></option><option>CHARTER</option><option>REGIONAL</option><option>OVERSEA</option></select>
         				  
         	<label for="dateS"><b>Date :</b></label>
-        	<input type="date" v-model:value="search.basicSearch.date" id="dateS"/>			  
+        	<input type="date" v-model:value="search.basicSearch.date" id="dateS"/>	
+        	
+        	<label for="dateS"><b>Sort by date:</b></label>
+        	<input type="checkbox" v-model:value="search.filter.sort" id="dateS"/>			  
         				  
         				  
         	<button class="btn btn-dark" v-on:click="searchFlights()">Search</button>			  
