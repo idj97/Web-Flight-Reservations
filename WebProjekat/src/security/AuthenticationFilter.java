@@ -42,6 +42,9 @@ public class AuthenticationFilter implements ContainerRequestFilter	{
 			String token = authHeader.substring(7);
 			if (dctx.getActiveTokens().containsKey(token)) {
 				User u = dctx.getActiveTokens().get(token);
+				if (u.isBlocked())
+					requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
+				
 				SecurityContext sctx = requestContext.getSecurityContext();
 				RequestSecurityContext rsctx = new RequestSecurityContext(new LoggedUser(u, token), sctx.isSecure());
 				requestContext.setSecurityContext(rsctx);

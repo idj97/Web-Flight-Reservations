@@ -181,6 +181,9 @@ Vue.component("flights-user", {
 				  axios.post("/WebProjekat/api/reservations", this.reservation, {headers: {"responseType":"json"}})
 		        .then(response => {
 		        	toastr.success("Seat/Seats reserved.");
+		        	$("#resModal").modal("toggle");
+		        	this.getFlights();
+		        	
 		        })
 		        .catch(response => {
 		            toastr.error("Something went wrong.");

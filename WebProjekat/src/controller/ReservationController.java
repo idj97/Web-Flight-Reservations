@@ -6,9 +6,9 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -68,6 +68,14 @@ public class ReservationController {
 			
 			Flight f = getDataContext().getFlights().get(dto.getFlightNum());
 			f.getReservations().put(reservationId, r);
+			
+			if (dto.getType().equals(ReservationType.FIRST))
+				f.setFirstSize(f.getFirstSize() - dto.getPassengerNum());
+			else if (dto.getType().equals(ReservationType.BUSINESS))
+				f.setBusinessSize(f.getBusinessSize() - dto.getPassengerNum());
+			else
+				f.setEconomySize(f.getEconomySize() - dto.getPassengerNum());
+			
 			r.setFlight(f);
 			r.setPassengerNumber(dto.getPassengerNum());
 			return Response.ok(new ReservationDTO(r)).build();
@@ -78,7 +86,7 @@ public class ReservationController {
 	
 	
 	
-	@PUT
+	@DELETE
 	@Secured
 	@Path("/cancel/{resId}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -89,6 +97,15 @@ public class ReservationController {
 			Flight f = r.getFlight();
 			u.getReservations().remove(resId);
 			f.getReservations().remove(resId);
+			
+			if (r.getType().equals(ReservationType.FIRST))
+				f.setFirstSize(f.getFirstSize() + r.getPassengerNumber());
+			else if (r.getType().equals(ReservationType.BUSINESS))
+				f.setBusinessSize(f.getBusinessSize() + r.getPassengerNumber());
+			else
+				f.setEconomySize(f.getEconomySize() + r.getPassengerNumber());
+			
+			
 			return Response.ok().build();
 		}
 		return Response.status(Status.BAD_REQUEST).build();

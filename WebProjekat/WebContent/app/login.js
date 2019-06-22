@@ -89,7 +89,7 @@ Vue.component("login", {
 				.catch(
 					error => {
 						var message = error.response.data.message;
-						alert(message);
+						toastr.info(message);
 					}
 				);
 			}

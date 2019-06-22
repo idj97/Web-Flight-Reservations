@@ -40,7 +40,8 @@ Vue.component("users", {
 	  
 	  
 	  blockUser: function(user) {
-		  axios.put(`/WebProjekat/api/users/block/${user.username}/${user.blocked}`)
+		  var b = !user.blocked;
+		  axios.put(`/WebProjekat/api/users/block/${user.username}/${b}`)
 		       .then(response => {
 		    	   if (user.blocked)
 		    		   toastr.success("User is now blocked.");

@@ -43,16 +43,28 @@ Vue.component("my-reservation", {
   methods: {
 	  
   	  getReservations: function() {
-	  axios.get("/WebProjekat/api/reservations", {headers: {"responseType":"json"}})
-      .then(response => {
-    	  this.reservations = [];
-          this.reservations = response.data;
-          console.log(JSON.stringify(response.data));
-      })
-      .catch(response => {
-          toastr.error("Something went wrong.");
-      });
-  },
+		  axios.get("/WebProjekat/api/reservations", {headers: {"responseType":"json"}})
+	      .then(response => {
+	    	  this.reservations = [];
+	          this.reservations = response.data;
+	          console.log(JSON.stringify(response.data));
+	      })
+	      .catch(response => {
+	          toastr.error("Something went wrong.");
+	      });
+  	  },
+  	  
+  	  
+  	  cancelReservation: function(res) {
+  		  axios.delete("/WebProjekat/api/reservations/cancel/" + res.number)
+  		       .then(response => {
+  		    	  toastr.success("Reservation cancel successful.");
+  		    	  this.getReservations();
+  		       })
+  		       .catch(response => {
+  		    	   toastr.error("Reservation not canceled.");
+  		       });
+  	  }
 
   	
   	  },
